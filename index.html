@@ -3,43 +3,534 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to DheQuest</title>
+  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/24Qy7m1/Dhe-Quest64.png" />
+  <title>DheQuest | Automate, Analyze, and Trade Smarter with Next-Gen Tools</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    :root {
+      --theme-color: #4ca8b4;
+      --primary-color: #4ca8b4;
+      --primary-color-hover: #2e8c99;
+      --primary-color-click: #0096aa;
+    }
     body {
-      font-family: sans-serif;
-      background-color: #f5f7fa;
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f9fa;
       margin: 0;
       padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      color: #333;
     }
 
-    h1 {
-      color: #4ca8b4;
-      font-size: 3rem;
-    }
-
-    p {
-      font-size: 1.25rem;
-      max-width: 600px;
+    header {
+      background-color: #4ca8b4;
+      color: white;
+      padding: 20px 0;
       text-align: center;
     }
 
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.9rem;
-      color: #aaa;
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
     }
+
+    h2 {
+      font-size: 2rem;
+      margin-top: 20px;
+      color: #343a40;
+    }
+
+    section {
+      padding: 40px 20px;
+    }
+
+    .card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      color: #4ca8b4;
+    }
+
+    .card-text {
+      font-size: 1rem;
+      color: #6c757d;
+    }
+
+    .video-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .video-section video {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+    body { background: #f7f9fc; font-family: 'Segoe UI', Arial, sans-serif; }
+    .navbar { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .navbar-brand { font-weight: bold; color: var(--theme-color) !important; font-size: 1rem; }
+    .nav-link, .navbar-nav .nav-link.active { color: #222 !important; font-weight: 500; }
+    .btn-outline-secondary {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background: transparent;
+    }
+    .btn-outline-secondary:hover,
+    .btn-outline-secondary:focus {
+      background: var(--primary-color-hover) !important;
+      color: #fff !important;
+      border-color: var(--primary-color-hover) !important;
+    }
+    .btn-outline-secondary:active {
+      background: var(--primary-color-click) !important;
+      color: #fff !important;
+      border-color: var(--primary-color-click) !important;
+    }
+    .hero {
+      position: relative;
+      padding: 0;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("https://i.ibb.co/rRr2vq0T/sl-122221-47450-06.jpg") no-repeat center center/cover;
+      opacity: 0.55;
+      z-index: 0;
+    }
+    .hero .container {
+      position: relative;
+      z-index: 2;
+    }
+    .hero-title { font-size: 2rem; font-weight: 700; }
+    .hero-title .highlight { color: var(--theme-color) !important; }
+    .section-title .highlight { color: var(--theme-color) !important; }
+    .lead { font-size: 1rem; color: #555; }
+    .hero-content-animate, .hero-image-animate {
+      opacity: 0;
+      transform: translateY(40px);
+      animation: fadeUp 1s ease-out forwards;
+    }
+    .hero-image-animate {
+      animation-delay: 0.3s;
+    }
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .hero-img { border-radius: 8px; box-shadow: 0 8px 16px rgba(76,168,180,0.8); }
+    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 24px; }
+    .feature-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); padding: 24px; margin-bottom: 24px; }
+    .feature-icon { font-size: 2rem; color: var(--theme-color); margin-right: 12px; }
+    .screenshot { border-radius: 14px; box-shadow: 0 4px 24px rgba(76,168,180,0.10); width: 100%; }
+    .video-section { background: #eef2fa; padding: 60px 0; }
+    .featured-video { border-radius: 14px; box-shadow: 0 4px 24px rgba(76,168,180,0.10); }
+    .badge-primary { background: var(--theme-color); }
+    footer {
+      /* background: linear-gradient(90deg, #f5f0ff 0%, #ece6fa 100%); */
+      background: #edfcff;
+
+      padding: 3rem 0 1rem 0;
+      font-size: 1rem;
+      color: #444;
+      border-top: 1px solid #eee;
+    }
+    .footer-brand {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: var(--theme-color);
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .footer-desc {
+      color: #888;
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      max-width: 300px;
+    }
+    .footer-links a {
+      color: #222;
+      text-decoration: none;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+    .footer-links a:hover {
+      color: var(--theme-color);
+      text-decoration: underline;
+    }
+    .footer-contact {
+      font-size: 1rem;
+      color: #444;
+    }
+    .footer-contact i {
+      color: var(--theme-color);
+      margin-right: 0.5rem;
+    }
+    .footer-social a {
+      color: #888;
+      font-size: 1.2rem;
+      margin-right: 1rem;
+      transition: color 0.2s;
+    }
+    .footer-social a:hover {
+      color: var(--theme-color);
+    }
+    .footer-bottom {
+      border-top: 1px solid #eee;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      font-size: 0.95rem;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .footer-bottom a {
+      color: #888;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .footer-bottom a:hover {
+      color: var(--theme-color);
+      text-decoration: underline;
+    }
+    @media (max-width: 767px) {
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .footer-bottom a {
+        margin-left: 0;
+        margin-right: 1rem;
+      }
+    }
+    .custom-height {
+      height: auto;
+    }
+
+    @media (min-width: 992px) {
+      .custom-height {
+        height: 100vh;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <h1>Hello, world!</h1>
-  <p>Welcome to DheQuest.</p>
-  <footer>&copy; 2025 SSPART Enterprise Private Limited</footer>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center" href="#">
+        <img src="https://i.ibb.co/qYhSRLJ4/Dhe-Quest128-Full.png" alt="DheQuest" width="auto" height="32" class="me-2" style="border-radius:8px;">
+        <!-- <span style="font-weight:700; font-size:1.5rem; color:var(--theme-color); letter-spacing:-1px;">SSPART</span> -->
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav mr-3">
+          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="#features">Features</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" href="#videos">Videos</a></li> -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="row align-items-center py-5 custom-height">
+        <!-- <div class="row align-items-center py-5 py-lg-0"> -->
+
+        <div class="col-lg-5 mb-lg-0 hero-content-animate p-4 order-2 order-lg-1">
+          <h1 class="hero-title">
+            Automate Your Trading<br>with <span class="highlight">DheQuest</span>
+          </h1>
+          <p class="lead mt-3">
+            Your intelligent trading companion that combines automated trading, advanced market analysis, and multi-broker integration into one powerful platform. Trade smarter, not harder.
+          </p>
+          <!-- <a href="#videos" class="btn btn-outline-secondary mt-4">Watch Videos</a> -->
+        </div>
+        <div class="col-lg-7 text-center hero-image-animate p-4 order-1 order-lg-2">
+          <img src="https://i.ibb.co/G3QVJNsx/overview.png" alt="DheQuest Dashboard" class="hero-img img-fluid" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-5">
+    <div class="container">
+      <h2 class="section-title text-center">Powerful Features for <span class="highlight">Smart Trading</span></h2>
+      <div class="row align-items-center">
+        <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1">
+          <h2 class="section-title">Powerful Trading Dashboard</h2>
+          <p>Manage your entire trading workflow with real-time insights and intuitive tools.</p>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128065;</span> <!-- 👁️ for watchlists -->
+            <div>
+              <h5>Smart Watchlists</h5>
+              <p>Track market movers and personal favorites in one place.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128230;</span> <!-- 🗂️ for baskets -->
+            <div>
+              <h5>Strategy Baskets</h5>
+              <p>Create and execute grouped trades with a single click.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128179;</span> <!-- 💳 for orders/positions -->
+            <div>
+              <h5>Live Orders & Positions</h5>
+              <p>Real-time updates on all your trades and holdings.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128202;</span> <!-- 📊 for payoff graph -->
+            <div>
+              <h5>Payoff Visualizer</h5>
+              <p>Instantly see risk/reward curves for any options strategy.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6 position-relative text-center order-1 order-lg-2 pb-4">
+          <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
+            <!-- Foreground -->
+            <img src="https://i.ibb.co/Q3XR9S93/Terminal1.png"
+                alt="Broker Screenshot"
+                class="img-fluid rounded shadow-lg"
+                style="width: 80%; position: relative; z-index: 2; transform: rotate(-5deg);" />
+            <!-- Background - Rotated slightly -->
+            <img src="https://i.ibb.co/zhLr8DGM/Terminal.png"
+                alt="Analytics Screenshot"
+                class="img-fluid rounded shadow position-absolute"
+                style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(5deg);" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Analysis Section -->
+  <section id="analysis" class="py-5 bg-white">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6 position-relative text-center pb-4">
+          <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
+            <!-- Foreground -->
+            <img src="https://i.ibb.co/c9G3h5d/sim1.png"
+                alt="Broker Screenshot"
+                class="img-fluid rounded shadow-lg"
+                style="width: 80%; position: relative; z-index: 2; transform: rotate(5deg);" />
+            <!-- Background - Rotated slightly -->
+            <img src="https://i.ibb.co/1YDRwpq8/sim2.png"
+                alt="Analytics Screenshot"
+                class="img-fluid rounded shadow position-absolute"
+                style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(-5deg);" />
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <h2 class="section-title">Automated Trading Intelligence</h2>
+          <p>End-to-end simulation, automation, and live trading — all in one powerful platform.</p>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128295;</span> <!-- ⚙️ Manual Simulator -->
+            <div>
+              <h5>Manual Simulator</h5>
+              <p>Test your ideas with interactive, rule-based simulations.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#129302;</span> <!-- 🤖 Auto Simulator -->
+            <div>
+              <h5>Automated Strategies</h5>
+              <p>Create and run logic-based strategies for hands-free trading.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128640;</span> <!-- 🚀 Live Execution -->
+            <div>
+              <h5>Live Execution</h5>
+              <p>Seamless integration with brokers for real-time trading.</p>
+            </div>
+          </div>
+
+          <div class="feature-card d-flex align-items-start">
+            <span class="feature-icon">&#128202;</span> <!-- 📊 Results -->
+            <div>
+              <h5>Simulated Performance</h5>
+              <p>Get detailed reports and insights on strategy outcomes.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Multi-Broker Section -->
+  <section id="brokers" class="py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <h2 class="section-title">Market Insights & Analysis</h2>
+        <p>Decode market behavior through powerful tools and data-backed insights.</p>
+        <div class="feature-card d-flex align-items-start">
+          <span class="feature-icon">&#128200;</span> <!-- 📈 -->
+          <div>
+            <h5>Option Chain</h5>
+            <p>Detailed strike-wise view of options with live and historical data.</p>
+          </div>
+        </div>
+        <div class="feature-card d-flex align-items-start">
+          <span class="feature-icon">&#128202;</span> <!-- 📊 -->
+          <div>
+            <h5>Open Interest Analysis</h5>
+            <p>Uncover market positioning with real-time OI build-up and unwinding.</p>
+          </div>
+        </div>
+        <div class="feature-card d-flex align-items-start">
+          <span class="feature-icon">&#128293;</span> <!-- 🔥 -->
+          <div>
+            <h5>Trending OI</h5>
+            <p>Identify surging contracts and high-interest zones across the chain.</p>
+          </div>
+        </div>
+        <div class="feature-card d-flex align-items-start">
+          <span class="feature-icon">&#128221;</span> <!-- 📝 -->
+          <div>
+            <h5>Historical Thesis</h5>
+            <p>Understand market context with past trend analysis and stats-backed narratives.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 position-relative text-center order-1 order-lg-2 pb-4">
+        <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
+          <!-- Foreground -->
+          <img src="https://i.ibb.co/ZRpYQ6fB/Analysis.png"
+              alt="Broker Screenshot"
+              class="img-fluid rounded shadow-lg"
+              style="width: 80%; position: relative; z-index: 2; transform: rotate(-5deg);" />
+          <!-- Background - Rotated slightly -->
+          <img src="https://i.ibb.co/R1Xqh1b/Analysis1.png"
+              alt="Analytics Screenshot"
+              class="img-fluid rounded shadow position-absolute"
+              style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(5deg);" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 
+  <section id="videos" class="video-section">
+    <div class="container text-center">
+      <h2 class="section-title">Featured Videos: Explore DheQuest</h2>
+      <p class="mb-4">See DheQuest in action and learn about our platform features, analysis tools, and broker integrations.</p>
+      <div class="row justify-content-center">
+        <div class="col-lg-8 mb-4">
+          <div class="embed-responsive embed-responsive-16by9 featured-video mb-3">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+          </div>
+          <span class="badge badge-primary mb-3">Featured</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 mb-4">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4">
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-3 mb-4 mb-md-0">
+          <span class="footer-brand">DheQuest</span>
+          <div class="footer-desc">
+            Revolutionizing trading with intelligent automation and data-driven insights that empower traders.
+          </div>
+          <div class="footer-social mb-2">
+            <a href="https://www.facebook.com/dhequest" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://x.com/Dhequest" target="_blank"><i class="fab fa-x"></i></a>
+            <a href="https://www.instagram.com/dhequest" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/showcase/dhequest" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.youtube.com/@dhequest" target="_blank"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        <div class="col-12 col-md-3 mb-4 mb-md-0 footer-links">
+          <div class="fw-bold mb-2">Quick Links</div>
+          <a href="#hero">Home</a>
+          <a href="#features">Features</a>
+          <!-- <a href="#videos">Videos</a> -->
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+        <div class="col-12 col-md-3 mb-4 mb-md-0 footer-contact">
+          <div class="fw-bold mb-2">Contact Info</div>
+          <div><i class="fa-solid fa-envelope"></i> contact@sspart-enterprise.com</div>
+          <div><i class="fa-solid fa-phone"></i> +91 95150-93965</div>
+        </div>
+      </div>
+      <div class="footer-bottom mt-4">
+        <div>&copy; 2025 SSPART Enterprise Private Limited. All rights reserved.</div>
+        <div>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Terms</a>
+          <a href="cookies.html">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Smooth scroll to videos section
+    document.querySelectorAll('a[href="#videos"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('videos').scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
 </body>
 </html>
