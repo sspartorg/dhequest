@@ -287,12 +287,21 @@
     const now = new Date().getTime();
     const distance = targetDate - now;
 
-    if (distance < 0) {
+    if (distance <= 0) {
       clearInterval(countdown);
-      document.getElementById("timer").innerHTML = "<h3>We’ve launched!</h3>";
+
+      // show videos & links
+      const videosSection = document.getElementById("videos");
+      if (videosSection) videosSection.style.display = "";
+
+      document.querySelectorAll(".video-link").forEach(el => el.style.display = "");
+
+      // optionally hide countdown after it finishes:
+      document.getElementById("countdown").style.display = "none";
       return;
     }
 
+    // update timer display as usual
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -320,7 +329,7 @@
         <ul class="navbar-nav mr-3">
           <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
           <li class="nav-item"><a class="nav-link active" href="#features">Features</a></li>
-          <!-- <li class="nav-item"><a class="nav-link" href="#videos">Videos</a></li> -->
+          <li class="nav-item video-link" style="display: none;"><a class="nav-link" href="#videos">Videos</a></li>
         </ul>
       </div>
     </div>
@@ -339,7 +348,7 @@
           <p class="lead mt-3">
             Your intelligent trading companion that combines automated trading, advanced market analysis, and multi-broker integration into one powerful platform. Trade smarter, not harder.
           </p>
-          <!-- <a href="#videos" class="btn btn-outline-secondary mt-4">Watch Videos</a> -->
+          <a href="#videos" class="btn btn-outline-secondary mt-4 video-link" style="display: none;">Watch Videos</a>
         </div>
         <div class="col-lg-7 text-center hero-image-animate p-4 order-1 order-lg-2">
           <img src="https://i.ibb.co/G3QVJNsx/overview.png" alt="DheQuest Dashboard" class="hero-img img-fluid" />
@@ -551,15 +560,14 @@
   </div>
 </section>
 
-<!-- 
-  <section id="videos" class="video-section">
+  <section id="videos" class="video-section" style="display: none;">
     <div class="container text-center">
       <h2 class="section-title">Featured Videos: Explore DheQuest</h2>
       <p class="mb-4">See DheQuest in action and learn about our platform features, analysis tools, and broker integrations.</p>
       <div class="row justify-content-center">
         <div class="col-lg-8 mb-4">
           <div class="embed-responsive embed-responsive-16by9 featured-video mb-3">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Ae4kEvll6m4" allowfullscreen></iframe>
           </div>
           <span class="badge badge-primary mb-3">Featured</span>
         </div>
@@ -567,22 +575,22 @@
       <div class="row">
         <div class="col-md-4 mb-4">
           <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sG32ndis9Ic" allowfullscreen></iframe>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/m9LTi52sn6o" allowfullscreen></iframe>
           </div>
         </div>
         <div class="col-md-4 mb-4">
           <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/PyWoN_5hb_o" allowfullscreen></iframe>
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/nrmrCGn0jLY" allowfullscreen></iframe>
           </div>
         </div>
       </div>
     </div>
-  </section> -->
+  </section>
 
   <!-- Footer -->
   <footer>
@@ -605,7 +613,7 @@
           <div class="fw-bold mb-2">Quick Links</div>
           <a href="#hero">Home</a>
           <a href="#features">Features</a>
-          <!-- <a href="#videos">Videos</a> -->
+          <a class="video-link" href="#videos" style="display: none;">Videos</a>
           <a href="privacy.html">Privacy Policy</a>
           <a href="terms.html">Terms of Service</a>
         </div>
