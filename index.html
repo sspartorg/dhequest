@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --ink: #0b2428;
@@ -95,10 +95,11 @@
 
     .pin { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; opacity: 0; animation: fade .6s 2.1s forwards; }
     .pin + .pin { animation-delay: 2.4s; }
-    .pin i { width: 14px; height: 14px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 6px rgba(143, 224, 210, .3); flex: none; animation: pulse 2.4s 3s infinite; }
+    .pin i { position: relative; width: 14px; height: 14px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 6px rgba(143, 224, 210, .3); flex: none; }
+    .pin i::after { content: ''; position: absolute; inset: 0; border-radius: 50%; background: rgba(143, 224, 210, .55); animation: pulse 2.4s 3s infinite; }
     .pin span { padding: 8px 14px; border-radius: 10px; background: var(--ink); color: var(--on-ink); font-size: .9rem; line-height: 1.35; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); max-width: 24ch; }
     .pin span b { color: var(--mint); font-weight: 600; display: block; }
-    @keyframes pulse { 50% { box-shadow: 0 0 0 12px rgba(143, 224, 210, 0); } }
+    @keyframes pulse { to { transform: scale(2.6); opacity: 0; } }
 
     .hero-fade { height: 140px; background: linear-gradient(transparent, var(--paper)); margin-top: -140px; position: relative; z-index: 4; pointer-events: none; }
 
@@ -114,6 +115,7 @@
     .brokers { padding: 36px 0 8px; }
     .brokers p { text-align: center; color: var(--text-soft); font-weight: 500; }
     .marquee { margin-top: 18px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .marquee.off ul { animation-play-state: paused; }
     .marquee ul { display: flex; gap: clamp(40px, 5vw, 80px); width: max-content; list-style: none; margin: 0; padding: 0 36px; animation: slide 36s linear infinite; }
     .marquee li { display: flex; align-items: center; gap: 14px; font: 700 clamp(1.25rem, 1.8vw, 1.7rem)/1 var(--display); letter-spacing: -0.02em; color: var(--text); white-space: nowrap; }
     .marquee li img { width: clamp(36px, 3vw, 46px); height: auto; object-fit: contain; }
@@ -156,11 +158,11 @@
     .tab { all: unset; cursor: pointer; padding: 18px 4px 0; position: relative; }
     .tab::before, .tab::after { content: ''; position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; }
     .tab::before { right: 0; background: var(--line); }
-    .tab::after { width: 0; background: var(--teal); }
+    .tab::after { right: 0; background: var(--teal); transform: scaleX(0); transform-origin: left; }
     .tab[aria-selected="true"]::after { animation: progress 7s linear forwards; }
     .tabs.paused .tab[aria-selected="true"]::after { animation-play-state: paused; }
-    .tabs.manual .tab[aria-selected="true"]::after { animation: none; width: 100%; }
-    @keyframes progress { to { width: 100%; } }
+    .tabs.manual .tab[aria-selected="true"]::after { animation: none; transform: none; }
+    @keyframes progress { to { transform: scaleX(1); } }
     .tab strong { display: block; font: 700 clamp(1.05rem, 1.4vw, 1.35rem) var(--display); color: var(--text-soft); transition: color .2s; }
     .tab small { display: block; color: var(--text-soft); font-size: .9rem; margin-top: 2px; }
     .tab[aria-selected="true"] strong, .tab:hover strong { color: var(--text); }
@@ -268,6 +270,9 @@
       .foot .about { grid-column: 1 / -1; }
     }
     @media (max-width: 900px) {
+      .nav.dark, .nav.solid { backdrop-filter: none; }
+      .nav.dark { background: rgba(11, 36, 40, .97); }
+      .nav.solid { background: rgba(243, 246, 245, .98); }
       .nav-toggle { display: block; }
       .nav-links { display: none; position: absolute; top: 72px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--paper); color: var(--text); border-bottom: 1px solid var(--line); padding: 8px var(--gutter) 16px; }
       .nav-links a { padding: 12px 0; }
@@ -332,7 +337,7 @@
           <div class="stage-main">
             <figure class="shot">
               <figcaption>Studio · Strategy canvas</figcaption>
-              <button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" fetchpriority="high" alt="Strategy canvas showing a NIFTY short straddle: sell ATM call and put, then exit on whichever comes first of a 15:20 time stop, a ₹4,000 loss stop or a ₹3,000 profit target."></button>
+              <button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" srcset="assets/screens/strategy-canvas-1440.webp 1440w, assets/screens/strategy-canvas.webp 2880w" sizes="(max-width: 860px) 100vw, 84vw" decoding="async" width="2880" height="1800" fetchpriority="high" alt="Strategy canvas showing a NIFTY short straddle: sell ATM call and put, then exit on whichever comes first of a 15:20 time stop, a ₹4,000 loss stop or a ₹3,000 profit target."></button>
             </figure>
             <div class="pin" style="left: 46%; top: 27%;"><i></i><span><b>Entry</b>Sell the ATM call and put</span></div>
             <div class="pin" style="left: 72%; top: 58%;"><i></i><span><b>Exit</b>Whichever hits first: time, loss or profit</span></div>
@@ -340,11 +345,11 @@
 
           <figure class="float float-pos">
             <figcaption>Positions</figcaption>
-            <img src="assets/screens/crop-positions.webp" width="1892" height="880" alt="Six open positions totalling +₹7,262.">
+            <img src="assets/screens/crop-positions.webp" srcset="assets/screens/crop-positions-half.webp 946w, assets/screens/crop-positions.webp 1892w" sizes="(max-width: 860px) 1px, 34vw" decoding="async" loading="lazy" width="1892" height="880" alt="Six open positions totalling +₹7,511.">
           </figure>
           <figure class="float float-pnl">
             <figcaption>P&amp;L heatmap</figcaption>
-            <img src="assets/screens/crop-pnl.webp" width="2320" height="1060" alt="P&L summary with YTD P&L, best day, worst day and win rate, above a calendar of daily results.">
+            <img src="assets/screens/crop-pnl.webp" srcset="assets/screens/crop-pnl-half.webp 1160w, assets/screens/crop-pnl.webp 2320w" sizes="(max-width: 860px) 1px, 34vw" decoding="async" loading="lazy" width="2320" height="1060" alt="P&L summary with YTD P&L, best day, worst day and win rate, above a calendar of daily results.">
           </figure>
         </div>
       </div>
@@ -374,64 +379,64 @@
               <span class="chap"><b>1</b>Build</span>
               <h3>Draw the rules, not the code.</h3>
               <p>Lay out entries, exits and stops as blocks on a canvas. Combine conditions with AND, OR, ANY and IF branches, and attach actions to buy, sell, modify, square off or alert you.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" loading="lazy" alt="Strategy canvas with entry, exit and stop blocks."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" srcset="assets/screens/strategy-canvas-1440.webp 1440w, assets/screens/strategy-canvas.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Strategy canvas with entry, exit and stop blocks."></button></figure>
             </article>
             <article class="beat" data-frame="1" data-chap="0">
               <span class="chap"><b>1</b>Build</span>
               <h3>Keep every idea, and every version.</h3>
               <p>Your strategy library holds drafts and finished work side by side. Each save is versioned, so you can compare and roll back.</p>
               <p class="note">When a strategy is ready, deploy it and DheQuest runs it live through your connected broker.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom"><img src="assets/screens/strategies.webp" width="2880" height="1800" loading="lazy" alt="Strategy library listing five strategies."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom"><img src="assets/screens/strategies.webp" srcset="assets/screens/strategies-1440.webp 1440w, assets/screens/strategies.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Strategy library listing five strategies."></button></figure>
             </article>
             <article class="beat" data-frame="2" data-chap="1">
               <span class="chap"><b>2</b>Test</span>
               <h3>Replay any past session, bar by bar.</h3>
               <p>The time-travel simulator puts you back on a historical day with the chain and OI as they were, so you can practise the trade before the money is real.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom"><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying NIFTY on 17 Aug 2026 at 12:16, with OI by strike and the option chain."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom"><img src="assets/screens/simulator.webp" srcset="assets/screens/simulator-1440.webp 1440w, assets/screens/simulator.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying NIFTY on 17 Aug 2026 at 12:16, with OI by strike and the option chain."></button></figure>
             </article>
             <article class="beat" data-frame="3" data-chap="1">
               <span class="chap"><b>2</b>Test</span>
               <h3>Backtest across months in one run.</h3>
               <p>Every backtest becomes a report with entries, win rate and net P&amp;L, so you can compare versions of an idea on evidence.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom"><img src="assets/screens/reports.webp" width="2880" height="1800" loading="lazy" alt="Simulation reports summary with simulated P&L and win rate."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom"><img src="assets/screens/reports.webp" srcset="assets/screens/reports-1440.webp 1440w, assets/screens/reports.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Simulation reports summary with simulated P&L and win rate."></button></figure>
             </article>
             <article class="beat" data-frame="4" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>Start from a shape.</h3>
               <p>Pick a bullish, bearish or neutral structure and it's priced instantly from the live chain. Straddles, strangles, condors, butterflies and more.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" loading="lazy" alt="Strategy picker with neutral shapes."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-strategy-picker.webp" srcset="assets/screens/terminal-strategy-picker-1440.webp 1440w, assets/screens/terminal-strategy-picker.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Strategy picker with neutral shapes."></button></figure>
             </article>
             <article class="beat" data-frame="5" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>See the payoff before you place it.</h3>
               <p>Max profit, max loss, breakevens and probability of profit update as you change strikes, so there are no surprises at expiry.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a short iron condor payoff graph over put and call open interest."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-payoff.webp" srcset="assets/screens/terminal-payoff-1440.webp 1440w, assets/screens/terminal-payoff.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Options terminal with a short iron condor payoff graph over put and call open interest."></button></figure>
             </article>
             <article class="beat" data-frame="6" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>Fire a whole basket at once.</h3>
               <p>Save groups of orders as baskets and place them together, for yourself or for your team.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom"><img src="assets/screens/baskets.webp" width="2880" height="1800" loading="lazy" alt="Baskets list of saved order groups."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom"><img src="assets/screens/baskets.webp" srcset="assets/screens/baskets-1440.webp 1440w, assets/screens/baskets.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Baskets list of saved order groups."></button></figure>
             </article>
             <article class="beat" data-frame="7" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>Every position, one screen.</h3>
               <p>Live P&amp;L across every account you trade, with one-click square off when it's time to get out.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom"><img src="assets/screens/positions.webp" width="2880" height="1800" loading="lazy" alt="Positions table with six open positions totalling +₹7,262."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom"><img src="assets/screens/positions.webp" srcset="assets/screens/positions-1440.webp 1440w, assets/screens/positions.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Positions table with six open positions totalling +₹7,511."></button></figure>
             </article>
           </div>
 
           <div class="screen" aria-hidden="true">
             <div class="chapters"><span class="on" style="--fill: 50%">1 · Build</span><span>2 · Test</span><span>3 · Trade</span></div>
             <div class="frames">
-              <figure class="shot on"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategies.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/simulator.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/reports.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/baskets.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/positions.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot on"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategy-canvas.webp" srcset="assets/screens/strategy-canvas-1440.webp 1440w, assets/screens/strategy-canvas.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategies.webp" srcset="assets/screens/strategies-1440.webp 1440w, assets/screens/strategies.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/simulator.webp" srcset="assets/screens/simulator-1440.webp 1440w, assets/screens/simulator.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/reports.webp" srcset="assets/screens/reports-1440.webp 1440w, assets/screens/reports.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-strategy-picker.webp" srcset="assets/screens/terminal-strategy-picker-1440.webp 1440w, assets/screens/terminal-strategy-picker.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-payoff.webp" srcset="assets/screens/terminal-payoff-1440.webp 1440w, assets/screens/terminal-payoff.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/baskets.webp" srcset="assets/screens/baskets-1440.webp 1440w, assets/screens/baskets.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/positions.webp" srcset="assets/screens/positions-1440.webp 1440w, assets/screens/positions.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" loading="lazy" width="2880" height="1800" alt=""></button></figure>
             </div>
           </div>
         </div>
@@ -454,30 +459,30 @@
         </div>
 
         <div class="panel" role="tabpanel" id="p-oc" aria-labelledby="t-oc">
-          <figure class="shot"><figcaption>Studio · Option chain</figcaption><button type="button" class="zoom"><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="NIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price, with PCR and max pain."></button></figure>
+          <figure class="shot"><figcaption>Studio · Option chain</figcaption><button type="button" class="zoom"><img src="assets/screens/option-chain.webp" srcset="assets/screens/option-chain-1440.webp 1440w, assets/screens/option-chain.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price, with PCR and max pain."></button></figure>
           <div><h3>The whole chain, at a glance.</h3><p>OI, change in OI, volume, IV and delta for calls and puts, with in-the-money strikes shaded and PCR and max pain on top.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-oi" aria-labelledby="t-oi" hidden>
-          <figure class="shot"><figcaption>Studio · Open interest</figcaption><button type="button" class="zoom"><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="NIFTY open interest by strike, showing call and put OI with additions and unwinding."></button></figure>
+          <figure class="shot"><figcaption>Studio · Open interest</figcaption><button type="button" class="zoom"><img src="assets/screens/open-interest.webp" srcset="assets/screens/open-interest-1440.webp 1440w, assets/screens/open-interest.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY open interest by strike, showing call and put OI with additions and unwinding."></button></figure>
           <div><h3>Where the walls are.</h3><p>Call and put OI by strike, with additions and unwinding marked, so support and resistance are visible before the move.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-toi" aria-labelledby="t-toi" hidden>
-          <figure class="shot"><figcaption>Studio · Trending OI</figcaption><button type="button" class="zoom"><img src="assets/screens/trending-oi.webp" width="2880" height="1800" loading="lazy" alt="Trending OI table with PCR, OI change and an interpretation for each interval."></button></figure>
+          <figure class="shot"><figcaption>Studio · Trending OI</figcaption><button type="button" class="zoom"><img src="assets/screens/trending-oi.webp" srcset="assets/screens/trending-oi-1440.webp 1440w, assets/screens/trending-oi.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Trending OI table with PCR, OI change and an interpretation for each interval."></button></figure>
           <div><h3>Who's in control, interval by interval.</h3><p>Each snapshot is read as long build-up, short covering, long unwinding or short build-up, with PCR alongside.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-th" aria-labelledby="t-th" hidden>
-          <figure class="shot"><figcaption>Studio · Thesis · Seasonal movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-seasonal.webp" width="2880" height="1800" loading="lazy" alt="NIFTY monthly returns heatmap from 2015 to 2026, colour-coded from strong gain to strong loss."></button></figure>
+          <figure class="shot"><figcaption>Studio · Thesis · Seasonal movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-seasonal.webp" srcset="assets/screens/thesis-seasonal-1440.webp 1440w, assets/screens/thesis-seasonal.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY monthly returns heatmap from 2015 to 2026, colour-coded from strong gain to strong loss."></button></figure>
           <div>
             <h3>How far does it usually move?</h3><p>Daily ranges, expiry-to-expiry moves and seasonal patterns across 11 years of NIFTY sessions, answered from history rather than gut feel.</p>
             <div class="minis">
-              <figure class="shot"><figcaption>Daily movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-daily.webp" width="2880" height="1800" loading="lazy" alt="NIFTY daily movement study: open-to-close, intraday range and opening gap distributions across 2,894 sessions."></button></figure>
-              <figure class="shot"><figcaption>Expiry movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-expiry.webp" width="2880" height="1800" loading="lazy" alt="NIFTY expiry-to-expiry move distribution with longest up and down streaks and a percentile breakdown."></button></figure>
+              <figure class="shot"><figcaption>Daily movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-daily.webp" srcset="assets/screens/thesis-daily-1440.webp 1440w, assets/screens/thesis-daily.webp 2880w" sizes="(max-width: 1080px) 50vw, 16vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY daily movement study: open-to-close, intraday range and opening gap distributions across 2,894 sessions."></button></figure>
+              <figure class="shot"><figcaption>Expiry movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-expiry.webp" srcset="assets/screens/thesis-expiry-1440.webp 1440w, assets/screens/thesis-expiry.webp 2880w" sizes="(max-width: 1080px) 50vw, 16vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY expiry-to-expiry move distribution with longest up and down streaks and a percentile breakdown."></button></figure>
             </div>
           </div>
         </div>
         <div class="panel" role="tabpanel" id="p-ch" aria-labelledby="t-ch" hidden>
-          <figure class="shot"><figcaption>Trade · Charts</figcaption><button type="button" class="zoom"><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="NIFTY daily candlestick chart with S/R zones, swing levels and arcs, plus OHLCV and arc impulse details."></button></figure>
-          <div><h3>Charts that read the structure.</h3><p>Support and resistance zones, swing levels and arcs drawn for you, with your watchlist alongside and layouts saved for next time.</p></div>
+          <figure class="shot"><figcaption>Trade · Charts</figcaption><button type="button" class="zoom"><img src="assets/screens/charts.webp" srcset="assets/screens/charts-1440.webp 1440w, assets/screens/charts.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="NIFTY daily candlestick chart with S/R zones, swing levels and arcs drawn on it."></button></figure>
+          <div><h3>Charts that read the structure.</h3><p>Support and resistance zones, swing levels and arcs drawn for you, with layouts saved for next time.</p></div>
         </div>
       </div>
     </section>
@@ -490,16 +495,16 @@
         </div>
         <div class="review">
           <figure>
-            <div class="shot"><figcaption>Account · P&amp;L heatmap</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-heatmap.webp" width="2880" height="1800" loading="lazy" alt="P&L heatmap calendar for July to September 2026 with green and red days, YTD P&L, best and worst day, and a 65% daily win rate."></button></div>
+            <div class="shot"><figcaption>Account · P&amp;L heatmap</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-heatmap.webp" srcset="assets/screens/pnl-heatmap-1440.webp 1440w, assets/screens/pnl-heatmap.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="P&L heatmap calendar for July to September 2026 with green and red days, YTD P&L, best and worst day, and a 65% daily win rate."></button></div>
             <p class="cap"><strong>P&amp;L heatmap.</strong> Every trading day coloured by result. Click a day to see the trades behind it.</p>
           </figure>
           <div class="col">
             <figure>
-              <div class="shot"><figcaption>Trade · Journal</figcaption><button type="button" class="zoom"><img src="assets/screens/journal.webp" width="2880" height="1800" loading="lazy" alt="Trading journal dashboard with net P&L, P&L by setup and recent entries."></button></div>
+              <div class="shot"><figcaption>Trade · Journal</figcaption><button type="button" class="zoom"><img src="assets/screens/journal.webp" srcset="assets/screens/journal-1440.webp 1440w, assets/screens/journal.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="Trading journal dashboard with net P&L, P&L by setup and recent entries."></button></div>
               <p class="cap"><strong>Journal.</strong> P&amp;L by setup, so you know whether breakouts or reversals pay you.</p>
             </figure>
             <figure>
-              <div class="shot"><figcaption>Account · P&amp;L statement</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-statement.webp" width="2880" height="1800" loading="lazy" alt="P&L statement listing closed trades with quantity, buy and sell averages and realised P&L."></button></div>
+              <div class="shot"><figcaption>Account · P&amp;L statement</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-statement.webp" srcset="assets/screens/pnl-statement-1440.webp 1440w, assets/screens/pnl-statement.webp 2880w" sizes="(max-width: 1080px) 100vw, 62vw" decoding="async" width="2880" height="1800" loading="lazy" alt="P&L statement listing closed trades with quantity, buy and sell averages and realised P&L."></button></div>
               <p class="cap"><strong>Statement.</strong> A clean ledger of closed trades, ready to export as CSV.</p>
             </figure>
           </div>
@@ -602,14 +607,16 @@
     nav.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', false); }));
 
     // Hero: screenshot tilts flat and floating cards settle as you scroll
-    let ticking = false;
+    // Hero height is cached (no layout read per scroll) and --p is only written when it changes
+    let ticking = false, heroH = hero.offsetHeight, lastP = '';
+    addEventListener('resize', () => { heroH = hero.offsetHeight; }, { passive: true });
     const onScroll = () => {
       if (ticking) return; ticking = true;
       requestAnimationFrame(() => {
-        const h = hero.offsetHeight;
-        nav.classList.toggle('solid', scrollY > h - 80);
-        nav.classList.toggle('dark', scrollY > 10 && scrollY <= h - 80);
-        if (!reduce) hero.style.setProperty('--p', Math.min(1, scrollY / (h * 0.45)).toFixed(3));
+        nav.classList.toggle('solid', scrollY > heroH - 80);
+        nav.classList.toggle('dark', scrollY > 10 && scrollY <= heroH - 80);
+        const p = reduce ? '1' : Math.min(1, scrollY / (heroH * 0.45)).toFixed(3);
+        if (p !== lastP) { hero.style.setProperty('--p', p); lastP = p; }
         ticking = false;
       });
     };
@@ -656,13 +663,22 @@
     // Lightbox
     const box = document.getElementById('lightbox'), boxImg = box.querySelector('img');
     document.querySelectorAll('.zoom').forEach(b => b.addEventListener('click', () => {
-      const img = b.querySelector('img'); boxImg.src = img.src; boxImg.alt = img.alt; box.showModal();
+      const img = b.querySelector("img"); boxImg.src = img.currentSrc || img.src; boxImg.alt = img.alt; box.showModal();
     }));
     box.addEventListener('click', e => { if (e.target === box) box.close(); });
 
     // YouTube: thumbnail first, iframe only on click
+    // Thumbnails are fetched only when the videos section is about to scroll into view
+    const ytObs = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.style.backgroundImage = `url(https://i.ytimg.com/vi/${e.target.dataset.yt}/hqdefault.jpg)`;
+      ytObs.unobserve(e.target);
+    }), { rootMargin: '600px 0px' });
+    // The broker marquee stops animating while it is off-screen
+    const marquee = document.querySelector('.marquee');
+    new IntersectionObserver(([e]) => marquee.classList.toggle('off', !e.isIntersecting)).observe(marquee);
     document.querySelectorAll('[data-yt]').forEach(b => {
-      b.style.backgroundImage = `url(https://i.ytimg.com/vi/${b.dataset.yt}/hqdefault.jpg)`;
+      ytObs.observe(b);
       b.addEventListener('click', () => {
         const f = document.createElement('iframe');
         f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1`;
