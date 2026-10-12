@@ -233,11 +233,14 @@
     .social a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--ink-line); border-radius: 50%; padding: 0; color: var(--on-ink); }
     .social a:hover { border-color: var(--mint); }
     .social svg { width: 16px; height: 16px; fill: currentColor; }
-    .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--ink-line); font-size: .88rem; }
+    .disclaimer { margin-top: 56px; padding-top: 28px; border-top: 1px solid var(--ink-line); }
+    .disclaimer h4 { margin: 0 0 14px; font: 600 .95rem var(--body); color: var(--on-ink); }
+    .disclaimer-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 48px; font-size: .86rem; line-height: 1.6; }
+    .disclaimer strong { color: var(--on-ink); font-weight: 600; }
+    .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--ink-line); font-size: .88rem; }
     .legal nav { display: flex; gap: 20px; }
     .legal a { text-decoration: none; }
     .legal a:hover { color: var(--mint); }
-    .disclaimer { margin-top: 16px; font-size: .82rem; max-width: 92ch; opacity: .8; }
 
     /* ---------- Lightbox ---------- */
     dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 94vh; }
@@ -281,6 +284,7 @@
       .nav .btn { display: none; }
     }
     @media (max-width: 680px) {
+      .disclaimer-grid { grid-template-columns: 1fr; }
       .hero { padding-top: 120px; }
       .platform { grid-template-columns: 1fr; }
       .platform > div, .platform > div:nth-child(even) { padding: 28px 0; border-left: 0; }
@@ -584,11 +588,19 @@
           <a href="tel:+919515093965">+91 95150-93965</a>
         </div>
       </div>
+      <section class="disclaimer" aria-labelledby="disclaimer-title">
+        <h4 id="disclaimer-title">Disclaimer</h4>
+        <div class="disclaimer-grid">
+          <p><strong>Sample data.</strong> Screens on this page show sample data for illustration. They are not real accounts, trades or results.</p>
+          <p><strong>Not investment advice.</strong> DheQuest is software for building, testing and running trading strategies. Nothing on this website is a recommendation to buy or sell any security.</p>
+          <p><strong>Market risk.</strong> Trading in derivatives involves substantial risk and may not suit every investor. Past, backtested and simulated performance does not guarantee future results.</p>
+          <p><strong>Trademarks.</strong> Broker names and logos belong to their respective owners and are shown only to indicate supported integrations.</p>
+        </div>
+      </section>
       <div class="legal">
         <span>&copy; <span id="year">2026</span> SSPART Enterprise Private Limited</span>
         <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a></nav>
       </div>
-      <p class="disclaimer">Screens show sample data for illustration. Trading in derivatives involves substantial risk; past and simulated performance does not guarantee future results.</p>
     </div>
   </footer>
 
