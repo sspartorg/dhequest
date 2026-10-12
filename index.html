@@ -114,7 +114,7 @@
     .marquee { margin-top: 18px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
     .marquee ul { display: flex; gap: clamp(40px, 5vw, 80px); width: max-content; list-style: none; margin: 0; padding: 0 36px; animation: slide 36s linear infinite; }
     .marquee li { display: flex; align-items: center; gap: 14px; font: 700 clamp(1.25rem, 1.8vw, 1.7rem)/1 var(--display); letter-spacing: -0.02em; color: var(--text); white-space: nowrap; }
-    .marquee li img { width: clamp(36px, 3vw, 46px); height: auto; border-radius: 10px; }
+    .marquee li img { width: clamp(36px, 3vw, 46px); height: auto; object-fit: contain; }
     @keyframes slide { to { transform: translateX(-50%); } }
 
     /* ---------- Section heads ---------- */
@@ -122,6 +122,9 @@
     .head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 64px; align-items: end; margin-bottom: clamp(48px, 6vw, 80px); }
     .head h2 { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -0.035em; }
     .head p { color: var(--text-soft); font-size: clamp(1.05rem, 1.25vw, 1.2rem); max-width: 48ch; }
+    /* Short titles: one line, description beside it */
+    .head.inline { grid-template-columns: max-content minmax(240px, 1fr); align-items: center; }
+    .head.inline h2 { white-space: nowrap; font-size: clamp(2.2rem, 3.6vw, 4.4rem); }
 
     /* ---------- Story (Build / Test / Trade) ---------- */
     .story { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(40px, 5vw, 96px); }
@@ -145,7 +148,8 @@
     .frames { position: relative; flex: 1; }
     .frames .shot { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(24px) scale(.975); transition: opacity .55s, transform .7s cubic-bezier(.2, .7, .1, 1); pointer-events: none; }
     .frames .shot.on { opacity: 1; transform: none; pointer-events: auto; }
-    .frames .shot img { max-height: calc(100vh - 220px); width: 100%; object-fit: cover; object-position: top; }
+    .frames .shot img { max-height: calc(100vh - 220px); width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+    .beat .beat-shot img { aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
 
     /* ---------- Market tabs ---------- */
     .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 32px; }
@@ -167,6 +171,9 @@
     @keyframes panelIn { from { opacity: 0; transform: translateX(28px); } }
     .panel h3 { font-size: clamp(1.6rem, 2.2vw, 2.2rem); font-weight: 800; }
     .panel p { margin-top: 12px; color: var(--text-soft); }
+    .minis { display: grid; gap: 14px; margin-top: 24px; }
+    .minis .shot figcaption { padding: 6px 12px; font-size: .78rem; }
+    .minis .shot figcaption::before { width: 7px; height: 7px; box-shadow: 11px 0 0 #f2c66d, 22px 0 0 #7fcf9a; margin-right: 22px; }
 
     /* ---------- Review band ---------- */
     .band { margin-top: clamp(96px, 11vw, 160px); background: var(--ink); color: var(--on-ink); padding: clamp(96px, 10vw, 150px) 0; position: relative; overflow: hidden; }
@@ -183,9 +190,9 @@
     .platform { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
     .platform > div { padding: 36px 36px 40px 0; border-bottom: 1px solid var(--line); }
     .platform > div:not(:nth-child(3n+1)) { padding-left: 36px; border-left: 1px solid var(--line); }
-    .platform svg { width: 30px; height: 30px; stroke: var(--teal); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 18px; }
-    .broker-row { display: flex; margin-bottom: 18px; }
-    .broker-row img { width: 34px; height: 34px; border-radius: 9px; background: #fff; box-shadow: 0 0 0 3px var(--paper); margin-right: -6px; }
+    .platform svg { display: block; width: 30px; height: 30px; stroke: var(--teal); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 18px; }
+    .broker-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+    .broker-row img { width: 30px; height: 30px; object-fit: contain; }
     .platform h3 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.015em; }
     .platform p { margin-top: 8px; color: var(--text-soft); }
 
@@ -234,6 +241,8 @@
 
     /* ---------- Responsive ---------- */
     @media (max-width: 1080px) {
+      .head.inline { grid-template-columns: 1fr; }
+      .head.inline h2 { white-space: normal; }
       .story { grid-template-columns: 1fr; }
       .screen { display: none; }
       .beats { padding: 0; }
@@ -351,7 +360,7 @@
 
     <section class="section" id="workflow" aria-labelledby="workflow-title">
       <div class="wrap">
-        <div class="head">
+        <div class="head inline">
           <h2 id="workflow-title">Build it. Test it. Then trade it.</h2>
           <p>Every strategy moves through the same three steps, in the same workspace, on the same data. Scroll through a strategy's life in DheQuest.</p>
         </div>
@@ -369,19 +378,19 @@
               <h3>Keep every idea, and every version.</h3>
               <p>Your strategy library holds drafts and finished work side by side. Each save is versioned, so you can compare and roll back.</p>
               <p class="note">When a strategy is ready, deploy it and DheQuest runs it live through your connected broker.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom"><img src="assets/screens/strategies.webp" width="2880" height="1120" loading="lazy" alt="Strategy library listing five strategies."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom"><img src="assets/screens/strategies.webp" width="2880" height="1800" loading="lazy" alt="Strategy library listing five strategies."></button></figure>
             </article>
             <article class="beat" data-frame="2" data-chap="1">
               <span class="chap"><b>2</b>Test</span>
               <h3>Replay any past session, bar by bar.</h3>
               <p>The time-travel simulator puts you back on a historical day with the chain and OI as they were, so you can practise the trade before the money is real.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom"><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying a NIFTY session."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom"><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying NIFTY on 17 Aug 2026 at 12:16, with OI by strike and the option chain."></button></figure>
             </article>
             <article class="beat" data-frame="3" data-chap="1">
               <span class="chap"><b>2</b>Test</span>
               <h3>Backtest across months in one run.</h3>
               <p>Every backtest becomes a report with entries, win rate and net P&amp;L, so you can compare versions of an idea on evidence.</p>
-              <figure class="shot beat-shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom"><img src="assets/screens/reports.webp" width="2880" height="1080" loading="lazy" alt="Simulation reports summary with simulated P&L and win rate."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom"><img src="assets/screens/reports.webp" width="2880" height="1800" loading="lazy" alt="Simulation reports summary with simulated P&L and win rate."></button></figure>
             </article>
             <article class="beat" data-frame="4" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
@@ -393,19 +402,19 @@
               <span class="chap"><b>3</b>Trade</span>
               <h3>See the payoff before you place it.</h3>
               <p>Max profit, max loss, breakevens and probability of profit update as you change strikes, so there are no surprises at expiry.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a short iron condor payoff graph."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a short iron condor payoff graph over put and call open interest."></button></figure>
             </article>
             <article class="beat" data-frame="6" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>Fire a whole basket at once.</h3>
               <p>Save groups of orders as baskets and place them together, for yourself or for your team.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom"><img src="assets/screens/baskets.webp" width="2880" height="1120" loading="lazy" alt="Baskets list of saved order groups."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom"><img src="assets/screens/baskets.webp" width="2880" height="1800" loading="lazy" alt="Baskets list of saved order groups."></button></figure>
             </article>
             <article class="beat" data-frame="7" data-chap="2">
               <span class="chap"><b>3</b>Trade</span>
               <h3>Every position, one screen.</h3>
               <p>Live P&amp;L across every account you trade, with one-click square off when it's time to get out.</p>
-              <figure class="shot beat-shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom"><img src="assets/screens/positions.webp" width="2880" height="1240" loading="lazy" alt="Positions table with six open positions totalling +₹7,262."></button></figure>
+              <figure class="shot beat-shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom"><img src="assets/screens/positions.webp" width="2880" height="1800" loading="lazy" alt="Positions table with six open positions totalling +₹7,262."></button></figure>
             </article>
           </div>
 
@@ -413,13 +422,13 @@
             <div class="chapters"><span class="on" style="--fill: 50%">1 · Build</span><span>2 · Test</span><span>3 · Trade</span></div>
             <div class="frames">
               <figure class="shot on"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategies.webp" width="2880" height="1120" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategies.webp" width="2880" height="1800" alt=""></button></figure>
               <figure class="shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/simulator.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/reports.webp" width="2880" height="1080" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/reports.webp" width="2880" height="1800" alt=""></button></figure>
               <figure class="shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" alt=""></button></figure>
               <figure class="shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/baskets.webp" width="2880" height="1120" alt=""></button></figure>
-              <figure class="shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/positions.webp" width="2880" height="1240" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/baskets.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/positions.webp" width="2880" height="1800" alt=""></button></figure>
             </div>
           </div>
         </div>
@@ -442,11 +451,11 @@
         </div>
 
         <div class="panel" role="tabpanel" id="p-oc" aria-labelledby="t-oc">
-          <figure class="shot"><figcaption>Studio · Option chain</figcaption><button type="button" class="zoom"><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="BANKNIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price."></button></figure>
+          <figure class="shot"><figcaption>Studio · Option chain</figcaption><button type="button" class="zoom"><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="NIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price, with PCR and max pain."></button></figure>
           <div><h3>The whole chain, at a glance.</h3><p>OI, change in OI, volume, IV and delta for calls and puts, with in-the-money strikes shaded and PCR and max pain on top.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-oi" aria-labelledby="t-oi" hidden>
-          <figure class="shot"><figcaption>Studio · Open interest</figcaption><button type="button" class="zoom"><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="Open interest bar chart by strike for BANKNIFTY showing call and put OI with increases and decreases."></button></figure>
+          <figure class="shot"><figcaption>Studio · Open interest</figcaption><button type="button" class="zoom"><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="NIFTY open interest by strike, showing call and put OI with additions and unwinding."></button></figure>
           <div><h3>Where the walls are.</h3><p>Call and put OI by strike, with additions and unwinding marked, so support and resistance are visible before the move.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-toi" aria-labelledby="t-toi" hidden>
@@ -454,19 +463,25 @@
           <div><h3>Who's in control, interval by interval.</h3><p>Each snapshot is read as long build-up, short covering, long unwinding or short build-up, with PCR alongside.</p></div>
         </div>
         <div class="panel" role="tabpanel" id="p-th" aria-labelledby="t-th" hidden>
-          <figure class="shot"><figcaption>Studio · Thesis library</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis.webp" width="2880" height="1800" loading="lazy" alt="Thesis library with daily movement, weekly and expiry movement, and seasonal movement studies."></button></figure>
-          <div><h3>How far does it usually move?</h3><p>Daily ranges, expiry-to-expiry moves and seasonal patterns, answered from history rather than gut feel.</p></div>
+          <figure class="shot"><figcaption>Studio · Thesis · Seasonal movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-seasonal.webp" width="2880" height="1800" loading="lazy" alt="NIFTY monthly returns heatmap from 2015 to 2026, colour-coded from strong gain to strong loss."></button></figure>
+          <div>
+            <h3>How far does it usually move?</h3><p>Daily ranges, expiry-to-expiry moves and seasonal patterns across 11 years of NIFTY sessions, answered from history rather than gut feel.</p>
+            <div class="minis">
+              <figure class="shot"><figcaption>Daily movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-daily.webp" width="2880" height="1800" loading="lazy" alt="NIFTY daily movement study: open-to-close, intraday range and opening gap distributions across 2,894 sessions."></button></figure>
+              <figure class="shot"><figcaption>Expiry movement</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis-expiry.webp" width="2880" height="1800" loading="lazy" alt="NIFTY expiry-to-expiry move distribution with longest up and down streaks and a percentile breakdown."></button></figure>
+            </div>
+          </div>
         </div>
         <div class="panel" role="tabpanel" id="p-ch" aria-labelledby="t-ch" hidden>
-          <figure class="shot"><figcaption>Trade · Charts</figcaption><button type="button" class="zoom"><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="Candlestick chart of NIFTY with a watchlist and drawing tools."></button></figure>
-          <div><h3>Charts that remember you.</h3><p>Price action with your watchlist alongside, drawing tools, and layouts saved for next time.</p></div>
+          <figure class="shot"><figcaption>Trade · Charts</figcaption><button type="button" class="zoom"><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="NIFTY daily candlestick chart with S/R zones, swing levels and arcs, plus OHLCV and arc impulse details."></button></figure>
+          <div><h3>Charts that read the structure.</h3><p>Support and resistance zones, swing levels and arcs drawn for you, with your watchlist alongside and layouts saved for next time.</p></div>
         </div>
       </div>
     </section>
 
     <div class="band" id="review">
       <section class="wrap" aria-labelledby="review-title">
-        <div class="head">
+        <div class="head inline">
           <h2 id="review-title">Know what actually worked.</h2>
           <p>Closed trades flow into your journal and P&amp;L automatically. Tag the setup, review the day, and see which ideas earn their keep.</p>
         </div>
@@ -491,7 +506,7 @@
 
     <section class="section" aria-labelledby="platform-title">
       <div class="wrap">
-        <div class="head">
+        <div class="head inline">
           <h2 id="platform-title">Built for how Indian traders work.</h2>
         </div>
         <div class="platform">
@@ -507,7 +522,7 @@
 
     <section class="section" id="videos" aria-labelledby="videos-title">
       <div class="wrap">
-        <div class="head">
+        <div class="head inline">
           <h2 id="videos-title">See it in action.</h2>
           <p>Short walkthroughs of real strategies, the analysis tools and broker setup.</p>
         </div>
