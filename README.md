@@ -13,3 +13,8 @@ python -m http.server 5500
 ```
 
 Then open http://localhost:5500.
+
+## Tests
+
+Browser tests live in `tests/` (Playwright, five screen sizes, Chromium and WebKit, plus speed and slow-network budgets).
+See `tests/README.md`; in short: `cd tests && npm install && npm run setup && npm test`.
