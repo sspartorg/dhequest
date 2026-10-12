@@ -8,204 +8,268 @@
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --ink: #0f2b30;
-      --ink-soft: #46636a;
-      --paper: #f4f7f6;
+      --ink: #0b2428;
+      --ink-2: #123439;
+      --ink-line: #24494f;
+      --on-ink: #e6f0ef;
+      --on-ink-soft: #9fbcba;
+      --paper: #f3f6f5;
       --surface: #ffffff;
-      --line: #d7e2e0;
-      --teal: #237a86;
+      --line: #d5e0de;
+      --text: #0f2b30;
+      --text-soft: #4a666c;
+      --teal: #1f7480;
       --teal-bright: #4ca8b4;
-      --teal-wash: #e3f1f2;
-      --gain: #178a4a;
-      --loss: #cf4545;
+      --mint: #8fe0d2;
       --display: 'Schibsted Grotesk', system-ui, sans-serif;
       --body: 'IBM Plex Sans', system-ui, sans-serif;
-      --wrap: 1180px;
-      --radius-lg: 14px;
-      --radius-sm: 8px;
+      --max: 1840px;
+      --gutter: clamp(20px, 4.5vw, 72px);
+      --r-lg: 16px;
+      --r-sm: 10px;
     }
     *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
-    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+    body { margin: 0; background: var(--paper); color: var(--text); font: 400 1.0625rem/1.65 var(--body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
     img { max-width: 100%; height: auto; display: block; }
-    a { color: var(--teal); }
-    h1, h2, h3 { font-family: var(--display); line-height: 1.08; margin: 0; letter-spacing: -0.02em; }
+    a { color: inherit; }
+    h1, h2, h3 { font-family: var(--display); line-height: 1.04; margin: 0; letter-spacing: -0.025em; }
     p { margin: 0; }
-    :focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 3px; border-radius: 4px; }
-    .wrap { width: min(var(--wrap), 100% - 32px); margin-inline: auto; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 3px; border-radius: 6px; }
+    .wrap { width: min(var(--max), 100% - 2 * var(--gutter)); margin-inline: auto; }
 
-    /* Nav */
-    .nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .2s; }
-    .nav.scrolled { border-bottom-color: var(--line); }
-    .nav .wrap { display: flex; align-items: center; gap: 32px; height: 64px; }
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 22px; border-radius: 999px; font: 600 .98rem/1 var(--body); text-decoration: none; border: 1.5px solid currentColor; background: transparent; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
+    .btn-mint { background: var(--mint); border-color: var(--mint); color: var(--ink); }
+    .btn-mint:hover { background: #fff; border-color: #fff; }
+    .btn-ghost { color: var(--on-ink); border-color: var(--ink-line); }
+    .btn-ghost:hover { border-color: var(--on-ink); }
+
+    /* ---------- Nav ---------- */
+    .nav { position: fixed; inset: 0 0 auto; z-index: 30; color: var(--on-ink); transition: background .25s, color .25s, box-shadow .25s; }
+    .nav.dark { background: rgba(11, 36, 40, .82); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--ink-line); }
+    .nav.solid { background: rgba(243, 246, 245, .92); backdrop-filter: blur(12px); color: var(--text); box-shadow: 0 1px 0 var(--line); }
+    .nav .wrap { display: flex; align-items: center; gap: 36px; height: 72px; }
+    .nav-logo { display: flex; align-items: center; }
     .nav-logo img { height: 30px; width: auto; }
-    .nav-links { display: flex; gap: 28px; margin-left: auto; }
-    .nav-links a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: .95rem; }
-    .nav-links a:hover { color: var(--teal); }
-    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; font: 600 .95rem/1 var(--body); text-decoration: none; border: 1.5px solid var(--ink); color: var(--ink); background: transparent; cursor: pointer; }
-    .btn-solid { background: var(--ink); color: #fff; }
-    .btn-solid:hover { background: var(--teal); border-color: var(--teal); }
-    .btn:not(.btn-solid):hover { background: var(--surface); }
-    .nav .btn { padding: 10px 16px; }
-    .nav-toggle { display: none; margin-left: auto; background: none; border: 0; padding: 8px; cursor: pointer; color: var(--ink); }
+    .nav-links { display: flex; gap: 32px; margin-left: auto; }
+    .nav-links a { text-decoration: none; font-weight: 500; font-size: .96rem; opacity: .85; }
+    .nav-links a:hover { opacity: 1; }
+    .nav .btn { padding: 11px 18px; font-size: .92rem; background: var(--mint); border-color: var(--mint); color: var(--ink); }
+    .nav.solid .btn { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .nav-toggle { display: none; margin-left: auto; background: none; border: 0; padding: 8px; cursor: pointer; color: inherit; }
 
-    /* Hero */
-    .hero { padding: 72px 0 0; overflow: hidden; }
-    .hero-copy { max-width: 760px; }
-    .hero h1 { font-size: clamp(2.6rem, 6.4vw, 5rem); font-weight: 800; }
-    .hero-lede { margin-top: 24px; font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--ink-soft); max-width: 58ch; }
-    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-    .hero-stage { position: relative; margin-top: 40px; }
-    .payoff { display: block; width: 100%; height: clamp(120px, 18vw, 220px); margin-bottom: -28px; position: relative; z-index: 0; }
-    .payoff .curve { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: draw 1.8s .2s cubic-bezier(.6,0,.2,1) forwards; }
-    .payoff .zero { stroke: var(--ink); stroke-opacity: .25; stroke-dasharray: 4 6; }
-    .payoff .gain { fill: var(--gain); fill-opacity: .14; }
-    .payoff .loss { fill: var(--loss); fill-opacity: .12; }
-    .payoff .fills { opacity: 0; animation: fade .6s 1.6s forwards; }
-    .payoff text { font: 600 13px var(--body); fill: var(--ink-soft); opacity: 0; animation: fade .6s 1.8s forwards; }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
+    /* ---------- Hero ---------- */
+    .hero { position: relative; background: var(--ink); color: var(--on-ink); padding: 150px 0 0; overflow: hidden; --p: 0; }
+    .hero::before { content: ''; position: absolute; inset: -20% -10% auto; height: 90%; background: radial-gradient(ellipse 50% 60% at 70% 40%, rgba(76, 168, 180, .28), transparent 70%), radial-gradient(ellipse 40% 50% at 15% 20%, rgba(143, 224, 210, .12), transparent 70%); pointer-events: none; }
+    .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 48px 64px; align-items: end; }
+    .hero h1 { font-size: clamp(3rem, 5.8vw, 8rem); font-weight: 800; letter-spacing: -0.04em; }
+    .hero h1 .line { display: block; overflow: hidden; padding-bottom: .04em; }
+    .hero h1 .line span { display: inline-block; transform: translateY(105%); animation: rise .9s cubic-bezier(.2, .7, .1, 1) forwards; }
+    .hero h1 .line:nth-child(2) span { animation-delay: .12s; }
+    .hero h1 .line:nth-child(3) span { animation-delay: .24s; }
+    @keyframes rise { to { transform: none; } }
+    .hero-side { padding-bottom: 12px; opacity: 0; animation: fade .8s .5s forwards; }
+    .hero-lede { font-size: clamp(1.1rem, 1.35vw, 1.3rem); color: var(--on-ink-soft); max-width: 46ch; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
     @keyframes fade { to { opacity: 1; } }
-    .hero .shot { position: relative; z-index: 1; }
 
-    /* Screenshot frame */
-    .shot { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: 0 30px 60px -30px rgba(15, 43, 48, .35), 0 2px 6px rgba(15, 43, 48, .06); overflow: hidden; }
-    .shot figcaption { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: .82rem; color: var(--ink-soft); background: #fbfcfc; }
-    .shot figcaption::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--teal-bright); box-shadow: 14px 0 0 var(--line), 28px 0 0 var(--line); margin-right: 28px; }
-    .shot button { all: unset; display: block; cursor: zoom-in; width: 100%; }
-    .shot button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: -3px; }
+    .stage { position: relative; margin-top: clamp(56px, 7vw, 96px); perspective: 2200px; }
+    .payoff { position: absolute; left: calc(-1 * var(--gutter)); top: -4%; width: calc(100% + 2 * var(--gutter)); height: 46%; pointer-events: none; }
+    .payoff .curve { fill: none; stroke: var(--mint); stroke-width: 2.5; stroke-linejoin: round; stroke-dasharray: 3000; stroke-dashoffset: 3000; animation: draw 2s .4s cubic-bezier(.6, 0, .2, 1) forwards; }
+    .payoff .zero { stroke: var(--on-ink-soft); stroke-opacity: .35; stroke-dasharray: 4 8; }
+    .payoff .gain { fill: var(--mint); fill-opacity: .12; opacity: 0; animation: fade .8s 1.9s forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    .stage-main { position: relative; width: 84%; margin-inline: auto; transform-origin: 50% 0; transform: rotateX(calc(16deg * (1 - var(--p)))) scale(calc(.94 + .06 * var(--p))); will-change: transform; }
+    .stage-main .shot { border-color: var(--ink-line); box-shadow: 0 50px 120px -30px rgba(0, 0, 0, .7); }
+    .float { position: absolute; z-index: 2; border-radius: var(--r-sm); overflow: hidden; background: #fff; box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .55); will-change: transform; }
+    .float-pos { left: 0; bottom: 12%; width: 34%; transform: translateY(calc(60px * (1 - var(--p)))); }
+    .float-pnl { right: 0; top: 18%; width: 30%; transform: translateY(calc(30px - 50px * (1 - var(--p)))); }
+    .float figcaption { position: absolute; top: 10px; right: 12px; padding: 4px 10px; border-radius: 999px; background: var(--ink); color: var(--mint); font: 600 .78rem/1.4 var(--body); }
+
+    .pin { position: absolute; z-index: 3; display: flex; align-items: center; gap: 10px; opacity: 0; animation: fade .6s 2.1s forwards; }
+    .pin + .pin { animation-delay: 2.4s; }
+    .pin i { width: 14px; height: 14px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 6px rgba(143, 224, 210, .3); flex: none; animation: pulse 2.4s 3s infinite; }
+    .pin span { padding: 8px 14px; border-radius: 10px; background: var(--ink); color: var(--on-ink); font-size: .9rem; line-height: 1.35; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); max-width: 24ch; }
+    .pin span b { color: var(--mint); font-weight: 600; display: block; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 12px rgba(143, 224, 210, 0); } }
+
+    .hero-fade { height: 140px; background: linear-gradient(transparent, var(--paper)); margin-top: -140px; position: relative; z-index: 4; pointer-events: none; }
+
+    /* ---------- Screenshot frame ---------- */
+    .shot { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; box-shadow: 0 30px 70px -35px rgba(15, 43, 48, .45), 0 2px 6px rgba(15, 43, 48, .05); }
+    .shot figcaption { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-bottom: 1px solid var(--line); font-size: .82rem; color: var(--text-soft); background: #fafcfb; }
+    .shot figcaption::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: #ef8a7b; box-shadow: 15px 0 0 #f2c66d, 30px 0 0 #7fcf9a; margin-right: 32px; }
+    .zoom { all: unset; display: block; cursor: zoom-in; width: 100%; }
+    .zoom:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: -3px; }
     figure { margin: 0; }
 
-    /* Brokers strip */
-    .brokers { margin-top: 72px; padding: 28px 0; border-block: 1px solid var(--line); }
-    .brokers .wrap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 36px; }
-    .brokers p { font-weight: 600; }
-    .brokers ul { display: flex; flex-wrap: wrap; gap: 8px 28px; list-style: none; margin: 0; padding: 0; color: var(--ink-soft); font-family: var(--display); font-weight: 700; font-size: 1.15rem; }
+    /* ---------- Broker marquee ---------- */
+    .brokers { padding: 36px 0 8px; }
+    .brokers p { text-align: center; color: var(--text-soft); font-weight: 500; }
+    .marquee { margin-top: 18px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+    .marquee ul { display: flex; gap: 72px; width: max-content; list-style: none; margin: 0; padding: 0 36px; animation: slide 36s linear infinite; }
+    .marquee li { font: 800 clamp(1.4rem, 2.2vw, 2rem)/1 var(--display); letter-spacing: -0.02em; color: #8fa8a6; white-space: nowrap; }
+    @keyframes slide { to { transform: translateX(-50%); } }
 
-    /* Section heads */
-    section { padding: 112px 0 0; }
-    .section-head { max-width: 680px; margin-bottom: 56px; }
-    .section-head h2 { font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 800; }
-    .section-head p { margin-top: 16px; color: var(--ink-soft); font-size: 1.15rem; }
+    /* ---------- Section heads ---------- */
+    .section { padding: clamp(96px, 11vw, 160px) 0 0; }
+    .head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 24px 64px; align-items: end; margin-bottom: clamp(48px, 6vw, 80px); }
+    .head h2 { font-size: clamp(2.4rem, 5.2vw, 5rem); font-weight: 800; letter-spacing: -0.035em; }
+    .head p { color: var(--text-soft); font-size: clamp(1.05rem, 1.25vw, 1.2rem); max-width: 48ch; }
 
-    /* Build / Test / Trade flow */
-    .flow { position: relative; }
-    .step { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 56px; position: relative; padding-left: 56px; padding-bottom: 96px; }
-    .step::before { content: ''; position: absolute; left: 15px; top: 34px; bottom: 0; border-left: 2px solid var(--line); }
-    .step:last-child::before { bottom: auto; height: 0; }
-    .step-marker { position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--surface); border: 2px solid var(--teal); display: grid; place-items: center; font: 700 .9rem var(--display); color: var(--teal); }
-    .step-copy { position: sticky; top: 100px; align-self: start; }
-    .step-copy h3 { font-size: clamp(1.7rem, 2.8vw, 2.3rem); font-weight: 800; }
-    .step-copy > p { margin-top: 14px; color: var(--ink-soft); }
-    .points { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 14px; }
-    .points li { padding-left: 18px; position: relative; }
-    .points li::before { content: ''; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--teal); }
-    .points strong { font-weight: 600; }
-    .note { margin-top: 24px; padding: 14px 16px; border-radius: var(--radius-sm); background: var(--teal-wash); font-size: .95rem; }
-    .stack { display: grid; gap: 28px; align-self: start; }
-    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    /* ---------- Story (Build / Test / Trade) ---------- */
+    .story { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(40px, 5vw, 96px); }
+    .beats { padding: 14vh 0 34vh; }
+    .beat { min-height: 62vh; display: flex; flex-direction: column; justify-content: center; opacity: .25; transition: opacity .4s; }
+    .beat.on { opacity: 1; }
+    .beat .chap { display: inline-flex; align-items: center; gap: 10px; font: 700 1rem var(--display); color: var(--teal); margin-bottom: 14px; }
+    .beat .chap b { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; border: 2px solid currentColor; font-size: .85rem; }
+    .beat h3 { font-size: clamp(1.7rem, 2.6vw, 2.6rem); font-weight: 800; }
+    .beat p { margin-top: 14px; color: var(--text-soft); max-width: 42ch; }
+    .beat .note { margin-top: 18px; padding: 12px 16px; border-left: 3px solid var(--teal-bright); background: #e4f1f1; border-radius: 0 var(--r-sm) var(--r-sm) 0; color: var(--text); font-size: .95rem; }
+    .beat .beat-shot { display: none; }
 
-    /* Market intelligence */
-    .intel { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
-    .intel .wide { grid-column: span 4; }
-    .intel .side { grid-column: span 2; display: grid; gap: 16px; align-content: start; }
-    .intel .side h3 { font-size: 1.35rem; }
-    .intel .side p { color: var(--ink-soft); }
-    .intel .half { grid-column: span 3; }
-    .intel .third { grid-column: span 2; }
-    .cap { margin-top: 12px; font-size: .95rem; color: var(--ink-soft); }
-    .cap strong { color: var(--ink); font-weight: 600; }
+    .screen { position: sticky; top: 96px; height: calc(100vh - 128px); display: flex; flex-direction: column; gap: 18px; }
+    .chapters { display: flex; gap: 8px; }
+    .chapters span { flex: 1; font: 700 .95rem var(--display); color: var(--text-soft); padding-top: 12px; position: relative; transition: color .3s; }
+    .chapters span::before, .chapters span::after { content: ''; position: absolute; left: 0; top: 0; height: 4px; border-radius: 4px; }
+    .chapters span::before { right: 0; background: var(--line); }
+    .chapters span::after { background: var(--teal); width: var(--fill, 0%); transition: width .5s; }
+    .chapters span.on { color: var(--text); }
+    .frames { position: relative; flex: 1; }
+    .frames .shot { position: absolute; inset: 0 0 auto; opacity: 0; transform: translateY(24px) scale(.975); transition: opacity .55s, transform .7s cubic-bezier(.2, .7, .1, 1); pointer-events: none; }
+    .frames .shot.on { opacity: 1; transform: none; pointer-events: auto; }
+    .frames .shot img { max-height: calc(100vh - 220px); width: 100%; object-fit: cover; object-position: top; }
 
-    /* Review band */
-    .band { margin-top: 112px; background: var(--ink); color: #e8f1f0; padding: 112px 0; }
-    .band section { padding: 0; }
-    .band .section-head p { color: #a9c3c1; }
-    .band .shot { border-color: #24474c; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
-    .band .cap { color: #a9c3c1; }
-    .band .cap strong { color: #fff; }
-    .review { display: grid; grid-template-columns: 7fr 5fr; gap: 24px; align-items: start; }
-    .review .col { display: grid; gap: 24px; align-content: start; }
+    /* ---------- Market tabs ---------- */
+    .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 32px; }
+    .tab { all: unset; cursor: pointer; padding: 18px 4px 0; position: relative; }
+    .tab::before, .tab::after { content: ''; position: absolute; left: 0; top: 0; height: 3px; border-radius: 3px; }
+    .tab::before { right: 0; background: var(--line); }
+    .tab::after { width: 0; background: var(--teal); }
+    .tab[aria-selected="true"]::after { animation: progress 7s linear forwards; }
+    .tabs.paused .tab[aria-selected="true"]::after { animation-play-state: paused; }
+    .tabs.manual .tab[aria-selected="true"]::after { animation: none; width: 100%; }
+    @keyframes progress { to { width: 100%; } }
+    .tab strong { display: block; font: 700 clamp(1.05rem, 1.4vw, 1.35rem) var(--display); color: var(--text-soft); transition: color .2s; }
+    .tab small { display: block; color: var(--text-soft); font-size: .9rem; margin-top: 2px; }
+    .tab[aria-selected="true"] strong, .tab:hover strong { color: var(--text); }
+    .tab:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 4px; }
+    .panel { display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 3fr); gap: 48px; align-items: center; }
+    .panel[hidden] { display: none; }
+    .panel .shot { animation: panelIn .6s cubic-bezier(.2, .7, .1, 1); }
+    @keyframes panelIn { from { opacity: 0; transform: translateX(28px); } }
+    .panel h3 { font-size: clamp(1.6rem, 2.2vw, 2.2rem); font-weight: 800; }
+    .panel p { margin-top: 12px; color: var(--text-soft); }
 
-    /* Platform list */
+    /* ---------- Review band ---------- */
+    .band { margin-top: clamp(96px, 11vw, 160px); background: var(--ink); color: var(--on-ink); padding: clamp(96px, 10vw, 150px) 0; position: relative; overflow: hidden; }
+    .band::before { content: ''; position: absolute; inset: auto -10% -30% 40%; height: 80%; background: radial-gradient(ellipse at center, rgba(76, 168, 180, .22), transparent 65%); pointer-events: none; }
+    .band .head { position: relative; }
+    .band .head p { color: var(--on-ink-soft); }
+    .band .shot { border-color: var(--ink-line); box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .7); }
+    .review { position: relative; display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 28px; align-items: start; }
+    .review .col { display: grid; gap: 28px; }
+    .cap { margin-top: 14px; color: var(--on-ink-soft); font-size: .98rem; }
+    .cap strong { color: #fff; font-weight: 600; }
+
+    /* ---------- Platform ---------- */
     .platform { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
-    .platform div { padding: 28px 28px 28px 0; border-bottom: 1px solid var(--line); }
-    .platform div:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
-    .platform h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
-    .platform p { margin-top: 8px; color: var(--ink-soft); font-size: .98rem; }
+    .platform > div { padding: 36px 36px 40px 0; border-bottom: 1px solid var(--line); }
+    .platform > div:not(:nth-child(3n+1)) { padding-left: 36px; border-left: 1px solid var(--line); }
+    .platform svg { width: 30px; height: 30px; stroke: var(--teal); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; margin-bottom: 18px; }
+    .platform h3 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.015em; }
+    .platform p { margin-top: 8px; color: var(--text-soft); }
 
-    /* Videos */
-    .videos { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
-    .videos .list { display: grid; gap: 16px; align-content: start; }
-    .video { border-radius: var(--radius-lg); overflow: hidden; background: #000; aspect-ratio: 16 / 9; position: relative; }
+    /* ---------- Videos ---------- */
+    .videos { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: 24px; }
+    .videos .list { display: grid; gap: 20px; }
+    .video { border-radius: var(--r-lg); overflow: hidden; background: #000; aspect-ratio: 16 / 9; position: relative; }
     .video iframe, .video button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-    .video button { cursor: pointer; padding: 0; background: #000 center / cover no-repeat; }
-    .video button::after { content: ''; position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; translate: -50% -50%; border-radius: 50%; background: rgba(255,255,255,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%230f2b30'/%3E%3C/svg%3E") center / 28px no-repeat; }
-    .videos .list .video button::after { width: 44px; height: 44px; background-size: 20px; }
+    .video button { cursor: pointer; padding: 0; background: #000 center / cover no-repeat; transition: transform .5s; }
+    .video:hover button { transform: scale(1.03); }
+    .video button::after { content: ''; position: absolute; left: 50%; top: 50%; width: 76px; height: 76px; translate: -50% -50%; border-radius: 50%; background: var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%230b2428'/%3E%3C/svg%3E") 54% 50% / 32px no-repeat; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+    .videos .list .video button::after { width: 50px; height: 50px; background-size: 22px; }
 
-    /* CTA */
-    .cta { padding: 128px 0 112px; }
-    .cta .wrap { display: grid; grid-template-columns: 3fr 2fr; gap: 48px; align-items: end; }
-    .cta h2 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; }
-    .cta p { color: var(--ink-soft); margin-bottom: 24px; font-size: 1.1rem; }
+    /* ---------- CTA ---------- */
+    .cta { margin-top: clamp(96px, 11vw, 160px); background: linear-gradient(120deg, #1f7480, #2e9aa3 55%, #5cc0b5); color: #fff; padding: clamp(80px, 9vw, 130px) 0; position: relative; overflow: hidden; }
+    .cta > svg { position: absolute; right: -4%; bottom: -6%; width: 64%; height: 70%; opacity: .2; }
+    .cta .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); gap: 40px 64px; align-items: end; }
+    .cta h2 { font-size: clamp(2.6rem, 6vw, 5.6rem); font-weight: 800; letter-spacing: -0.04em; }
+    .cta p { font-size: 1.15rem; margin-bottom: 26px; color: #effaf9; }
+    .cta .btn { background: var(--ink); border-color: var(--ink); color: #fff; }
+    .cta .btn:hover { background: #fff; border-color: #fff; color: var(--ink); }
 
-    /* Footer */
-    footer { border-top: 1px solid var(--line); padding: 56px 0 32px; font-size: .95rem; }
-    .foot { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 40px; }
-    .foot h4 { margin: 0 0 12px; font: 600 .95rem var(--body); }
-    .foot a { color: var(--ink-soft); text-decoration: none; display: block; padding: 3px 0; }
-    .foot a:hover { color: var(--teal); }
-    .foot .about p { color: var(--ink-soft); margin: 14px 0 18px; max-width: 36ch; }
+    /* ---------- Footer ---------- */
+    footer { background: var(--ink); color: var(--on-ink-soft); padding: 72px 0 36px; font-size: .95rem; }
+    .foot { display: grid; grid-template-columns: 2fr 1fr 1.4fr; gap: 48px; }
+    .foot h4 { margin: 0 0 14px; font: 600 .95rem var(--body); color: var(--on-ink); }
+    .foot a { text-decoration: none; display: block; padding: 3px 0; }
+    .foot a:hover { color: var(--mint); }
+    .foot .about p { margin: 16px 0 20px; max-width: 38ch; }
     .social { display: flex; gap: 10px; }
-    .social a { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; padding: 0; color: var(--ink); }
-    .social a:hover { border-color: var(--teal); }
+    .social a { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--ink-line); border-radius: 50%; padding: 0; color: var(--on-ink); }
+    .social a:hover { border-color: var(--mint); }
     .social svg { width: 16px; height: 16px; fill: currentColor; }
-    .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .88rem; }
+    .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--ink-line); font-size: .88rem; }
     .legal nav { display: flex; gap: 20px; }
-    .legal a { color: var(--ink-soft); display: inline; }
-    .disclaimer { margin-top: 16px; color: var(--ink-soft); font-size: .82rem; max-width: 90ch; }
+    .legal a { text-decoration: none; }
+    .legal a:hover { color: var(--mint); }
+    .disclaimer { margin-top: 16px; font-size: .82rem; max-width: 92ch; opacity: .8; }
 
-    /* Lightbox */
-    dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: min(1400px, 96vw); max-height: 94vh; }
-    dialog.lightbox::backdrop { background: rgba(10, 30, 34, .82); }
-    dialog.lightbox img { max-height: 90vh; width: auto; border-radius: var(--radius-sm); }
+    /* ---------- Lightbox ---------- */
+    dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: 96vw; max-height: 94vh; }
+    dialog.lightbox::backdrop { background: rgba(6, 22, 25, .86); }
+    dialog.lightbox img { max-height: 90vh; width: auto; border-radius: var(--r-sm); }
     dialog.lightbox form { position: fixed; top: 16px; right: 16px; }
-    dialog.lightbox button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; font-size: 1.4rem; cursor: pointer; }
+    dialog.lightbox button { width: 46px; height: 46px; border-radius: 50%; border: 0; background: #fff; font-size: 1.5rem; cursor: pointer; }
 
-    /* Responsive */
-    @media (max-width: 960px) {
-      .step { grid-template-columns: 1fr; gap: 32px; padding-left: 48px; }
-      .step-copy { position: static; }
-      .intel .wide, .intel .side, .intel .half, .intel .third { grid-column: span 6; }
-      .review, .videos, .cta .wrap { grid-template-columns: 1fr; }
+    /* ---------- Responsive ---------- */
+    @media (max-width: 1080px) {
+      .story { grid-template-columns: 1fr; }
+      .screen { display: none; }
+      .beats { padding: 0; }
+      .beat { min-height: 0; opacity: 1; padding-bottom: 72px; }
+      .beat .beat-shot { display: block; margin-top: 28px; }
+      .panel { grid-template-columns: 1fr; gap: 20px; }
+      .panel > div:last-child { order: -1; }
+      .review, .videos { grid-template-columns: 1fr; }
       .platform { grid-template-columns: 1fr 1fr; }
-      .platform div:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
-      .platform div:nth-child(even) { padding-left: 24px; border-left: 1px solid var(--line); }
+      .platform > div:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
+      .platform > div:nth-child(even) { padding-left: 32px; border-left: 1px solid var(--line); }
+    }
+    @media (max-width: 860px) {
+      .hero-grid, .head, .cta .wrap { grid-template-columns: 1fr; }
+      .stage-main { width: 100%; }
+      .float, .pin { display: none; }
+      .tabs { grid-template-columns: repeat(5, minmax(150px, 1fr)); overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+      .tab small { display: none; }
       .foot { grid-template-columns: 1fr 1fr; }
       .foot .about { grid-column: 1 / -1; }
     }
-    @media (max-width: 720px) {
+    @media (max-width: 680px) {
       .nav-toggle { display: block; }
-      .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--paper); border-bottom: 1px solid var(--line); padding: 8px 16px 16px; }
+      .nav-links { display: none; position: absolute; top: 72px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--paper); color: var(--text); border-bottom: 1px solid var(--line); padding: 8px var(--gutter) 16px; }
       .nav-links a { padding: 12px 0; }
+      .nav.open { background: var(--paper); color: var(--text); }
       .nav.open .nav-links { display: flex; }
       .nav .btn { display: none; }
-      .hero { padding-top: 48px; }
-      section { padding-top: 80px; }
-      .band { margin-top: 80px; padding: 80px 0; }
-      .step { padding-left: 0; padding-bottom: 72px; }
-      .step::before { display: none; }
-      .step-marker { position: static; margin-bottom: 14px; }
-      .pair, .platform { grid-template-columns: 1fr; }
-      .platform div:nth-child(even) { padding-left: 0; border-left: 0; }
-      .platform div { padding-right: 0; }
+      .hero { padding-top: 120px; }
+      .platform { grid-template-columns: 1fr; }
+      .platform > div, .platform > div:nth-child(even) { padding: 28px 0; border-left: 0; }
       .foot { grid-template-columns: 1fr; }
     }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      .payoff .curve { animation: none; stroke-dashoffset: 0; }
-      .payoff .fills, .payoff text { animation: none; opacity: 1; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+      .marquee ul { animation: none; flex-wrap: wrap; justify-content: center; width: auto; gap: 16px 40px; }
+      .marquee li[aria-hidden] { display: none; }
+      .stage-main, .float { transform: none !important; }
     }
   </style>
 </head>
@@ -222,220 +286,197 @@
         <a href="#review">Journal &amp; P&amp;L</a>
         <a href="#videos">Videos</a>
       </nav>
-      <a class="btn btn-solid" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
+      <a class="btn" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
     </div>
   </header>
 
   <main id="top">
-    <div class="hero">
+    <div class="hero" id="hero">
       <div class="wrap">
-        <div class="hero-copy">
-          <h1>Your options desk, from idea to order.</h1>
-          <p class="hero-lede">Draw a strategy as a flow of rules, replay it against past sessions, then trade it through your own broker. No code, no spreadsheets, no switching between five tabs.</p>
-          <div class="hero-actions">
-            <a class="btn btn-solid" href="#workflow">See how it works</a>
-            <a class="btn" href="#videos">Watch the videos</a>
+        <div class="hero-grid">
+          <h1><span class="line"><span>Your options desk,</span></span><span class="line"><span>from idea</span></span><span class="line"><span>to order.</span></span></h1>
+          <div class="hero-side">
+            <p class="hero-lede">Draw a strategy as a flow of rules, replay it against past sessions, then trade it through your own broker. No code, no spreadsheets, no juggling five tabs.</p>
+            <div class="hero-actions">
+              <a class="btn btn-mint" href="#workflow">See how it works</a>
+              <a class="btn btn-ghost" href="#videos">Watch the videos</a>
+            </div>
           </div>
         </div>
 
-        <div class="hero-stage">
-          <!-- Short iron condor payoff: loss wings, flat profit plateau -->
-          <svg class="payoff" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true">
-            <line class="zero" x1="0" y1="130" x2="1180" y2="130"/>
-            <g class="fills">
-              <polygon class="loss" points="0,190 380,190 432,130 0,130"/>
-              <polygon class="gain" points="432,130 470,70 710,70 748,130"/>
-              <polygon class="loss" points="748,130 800,190 1180,190 1180,130"/>
-            </g>
-            <polyline class="curve" points="0,190 380,190 470,70 710,70 800,190 1180,190"/>
-            <text x="532" y="56">Max profit</text>
+        <div class="stage">
+          <!-- Short iron condor payoff, drawn once on load -->
+          <svg class="payoff" viewBox="0 0 1600 300" preserveAspectRatio="none" aria-hidden="true">
+            <line class="zero" x1="0" y1="190" x2="1600" y2="190" vector-effect="non-scaling-stroke"/>
+            <polygon class="gain" points="600,190 650,90 950,90 1000,190"/>
+            <polyline class="curve" points="0,270 540,270 650,90 950,90 1060,270 1600,270" vector-effect="non-scaling-stroke"/>
           </svg>
-          <figure class="shot">
-            <figcaption>Studio · Strategy canvas</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" alt="Strategy canvas showing a NIFTY short straddle: sell ATM call and put, then exit on whichever comes first of a 15:20 time stop, a ₹4,000 loss stop or a ₹3,000 profit target." fetchpriority="high"></button>
+
+          <div class="stage-main">
+            <figure class="shot">
+              <figcaption>Studio · Strategy canvas</figcaption>
+              <button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" fetchpriority="high" alt="Strategy canvas showing a NIFTY short straddle: sell ATM call and put, then exit on whichever comes first of a 15:20 time stop, a ₹4,000 loss stop or a ₹3,000 profit target."></button>
+            </figure>
+            <div class="pin" style="left: 46%; top: 27%;"><i></i><span><b>Entry</b>Sell the ATM call and put</span></div>
+            <div class="pin" style="left: 72%; top: 58%;"><i></i><span><b>Exit</b>Whichever hits first: time, loss or profit</span></div>
+          </div>
+
+          <figure class="float float-pos">
+            <figcaption>Positions</figcaption>
+            <img src="assets/screens/crop-positions.webp" width="1892" height="880" alt="Six open positions totalling +₹7,262.">
+          </figure>
+          <figure class="float float-pnl">
+            <figcaption>P&amp;L heatmap</figcaption>
+            <img src="assets/screens/crop-pnl.webp" width="2320" height="1060" alt="P&L summary with YTD P&L, best day, worst day and win rate, above a calendar of daily results.">
           </figure>
         </div>
       </div>
+      <div class="hero-fade"></div>
     </div>
 
     <div class="brokers">
-      <div class="wrap">
-        <p>Trade through the broker you already use</p>
+      <p>Trade through the broker you already use</p>
+      <div class="marquee">
         <ul>
           <li>Zerodha</li><li>Upstox</li><li>Angel One</li><li>Fyers</li><li>Groww</li><li>Dhan</li><li>Kotak Neo</li><li>Axis Direct</li>
+          <li aria-hidden="true">Zerodha</li><li aria-hidden="true">Upstox</li><li aria-hidden="true">Angel One</li><li aria-hidden="true">Fyers</li><li aria-hidden="true">Groww</li><li aria-hidden="true">Dhan</li><li aria-hidden="true">Kotak Neo</li><li aria-hidden="true">Axis Direct</li>
         </ul>
       </div>
     </div>
 
-    <section id="workflow" class="wrap" aria-labelledby="workflow-title">
-      <div class="section-head">
-        <h2 id="workflow-title">Build it, test it, then trade it.</h2>
-        <p>Every strategy moves through the same three steps, in the same workspace, on the same data.</p>
-      </div>
+    <section class="section" id="workflow" aria-labelledby="workflow-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="workflow-title">Build it. Test it. Then trade it.</h2>
+          <p>Every strategy moves through the same three steps, in the same workspace, on the same data. Scroll through a strategy's life in DheQuest.</p>
+        </div>
 
-      <div class="flow">
-        <article class="step">
-          <span class="step-marker" aria-hidden="true">1</span>
-          <div class="step-copy">
-            <h3>Build</h3>
-            <p>Lay out entries, exits and stops as blocks on a canvas. You can read the logic at a glance, and so can anyone you share it with.</p>
-            <ul class="points">
-              <li><strong>Logic blocks.</strong> Combine conditions with AND, OR, ANY and IF branches.</li>
-              <li><strong>Actions.</strong> Buy, sell, modify, square off or send yourself an alert.</li>
-              <li><strong>Versions.</strong> Every save is kept, so you can compare and roll back.</li>
-            </ul>
-            <p class="note">When a strategy is ready, deploy it and DheQuest runs it live through your connected broker.</p>
+        <div class="story">
+          <div class="beats">
+            <article class="beat on" data-frame="0" data-chap="0">
+              <span class="chap"><b>1</b>Build</span>
+              <h3>Draw the rules, not the code.</h3>
+              <p>Lay out entries, exits and stops as blocks on a canvas. Combine conditions with AND, OR, ANY and IF branches, and attach actions to buy, sell, modify, square off or alert you.</p>
+              <figure class="shot beat-shot"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" loading="lazy" alt="Strategy canvas with entry, exit and stop blocks."></button></figure>
+            </article>
+            <article class="beat" data-frame="1" data-chap="0">
+              <span class="chap"><b>1</b>Build</span>
+              <h3>Keep every idea, and every version.</h3>
+              <p>Your strategy library holds drafts and finished work side by side. Each save is versioned, so you can compare and roll back.</p>
+              <p class="note">When a strategy is ready, deploy it and DheQuest runs it live through your connected broker.</p>
+              <figure class="shot beat-shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom"><img src="assets/screens/strategies.webp" width="2880" height="1120" loading="lazy" alt="Strategy library listing five strategies."></button></figure>
+            </article>
+            <article class="beat" data-frame="2" data-chap="1">
+              <span class="chap"><b>2</b>Test</span>
+              <h3>Replay any past session, bar by bar.</h3>
+              <p>The time-travel simulator puts you back on a historical day with the chain and OI as they were, so you can practise the trade before the money is real.</p>
+              <figure class="shot beat-shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom"><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying a NIFTY session."></button></figure>
+            </article>
+            <article class="beat" data-frame="3" data-chap="1">
+              <span class="chap"><b>2</b>Test</span>
+              <h3>Backtest across months in one run.</h3>
+              <p>Every backtest becomes a report with entries, win rate and net P&amp;L, so you can compare versions of an idea on evidence.</p>
+              <figure class="shot beat-shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom"><img src="assets/screens/reports.webp" width="2880" height="1080" loading="lazy" alt="Simulation reports summary with simulated P&L and win rate."></button></figure>
+            </article>
+            <article class="beat" data-frame="4" data-chap="2">
+              <span class="chap"><b>3</b>Trade</span>
+              <h3>Start from a shape.</h3>
+              <p>Pick a bullish, bearish or neutral structure and it's priced instantly from the live chain. Straddles, strangles, condors, butterflies and more.</p>
+              <figure class="shot beat-shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" loading="lazy" alt="Strategy picker with neutral shapes."></button></figure>
+            </article>
+            <article class="beat" data-frame="5" data-chap="2">
+              <span class="chap"><b>3</b>Trade</span>
+              <h3>See the payoff before you place it.</h3>
+              <p>Max profit, max loss, breakevens and probability of profit update as you change strikes, so there are no surprises at expiry.</p>
+              <figure class="shot beat-shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a short iron condor payoff graph."></button></figure>
+            </article>
+            <article class="beat" data-frame="6" data-chap="2">
+              <span class="chap"><b>3</b>Trade</span>
+              <h3>Fire a whole basket at once.</h3>
+              <p>Save groups of orders as baskets and place them together, for yourself or for your team.</p>
+              <figure class="shot beat-shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom"><img src="assets/screens/baskets.webp" width="2880" height="1120" loading="lazy" alt="Baskets list of saved order groups."></button></figure>
+            </article>
+            <article class="beat" data-frame="7" data-chap="2">
+              <span class="chap"><b>3</b>Trade</span>
+              <h3>Every position, one screen.</h3>
+              <p>Live P&amp;L across every account you trade, with one-click square off when it's time to get out.</p>
+              <figure class="shot beat-shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom"><img src="assets/screens/positions.webp" width="2880" height="1240" loading="lazy" alt="Positions table with six open positions totalling +₹7,262."></button></figure>
+            </article>
           </div>
-          <div class="stack">
-            <figure class="shot">
-              <figcaption>Studio · Strategies</figcaption>
-              <button type="button" data-zoom><img src="assets/screens/strategies.webp" width="2880" height="1120" loading="lazy" alt="Strategy library listing five strategies such as NIFTY Short Straddle, Opening Range Breakout and Expiry Day Iron Fly, with instrument, status and last modified date."></button>
-            </figure>
-          </div>
-        </article>
 
-        <article class="step">
-          <span class="step-marker" aria-hidden="true">2</span>
-          <div class="step-copy">
-            <h3>Test</h3>
-            <p>Run the strategy over months of past sessions before any real money is involved, or step through a single day bar by bar.</p>
-            <ul class="points">
-              <li><strong>Backtest reports.</strong> Entries, win rate and net P&amp;L for every run.</li>
-              <li><strong>Time-travel simulator.</strong> Replay any historical session and practise positions as the day unfolds.</li>
-              <li><strong>Paper trading.</strong> Keep paper and real results separate, or view them combined.</li>
-            </ul>
-          </div>
-          <div class="stack">
-            <figure class="shot">
-              <figcaption>Studio · Time-travel simulator</figcaption>
-              <button type="button" data-zoom><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying a NIFTY session from July 2026 with playback controls and open interest by strike."></button>
-            </figure>
-            <figure class="shot">
-              <figcaption>Studio · Simulation reports</figcaption>
-              <button type="button" data-zoom><img src="assets/screens/reports.webp" width="2880" height="1080" loading="lazy" alt="Simulation reports summary showing simulated P&L of ₹1,250 and a 55% average win rate."></button>
-            </figure>
-          </div>
-        </article>
-
-        <article class="step">
-          <span class="step-marker" aria-hidden="true">3</span>
-          <div class="step-copy">
-            <h3>Trade</h3>
-            <p>Price a multi-leg position against the live chain, see the payoff before you send it, then manage everything from one positions screen.</p>
-            <ul class="points">
-              <li><strong>Options terminal.</strong> Pick a ready-made shape or add legs yourself. See max profit, max loss, breakevens and probability of profit.</li>
-              <li><strong>Baskets.</strong> Save a group of orders and place them together.</li>
-              <li><strong>Positions and orders.</strong> Live P&amp;L across every account you trade, with one-click square off.</li>
-            </ul>
-          </div>
-          <div class="stack">
-            <figure class="shot">
-              <figcaption>Trade · Options terminal</figcaption>
-              <button type="button" data-zoom><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a four-leg NIFTY short iron condor, its payoff graph, max profit, max loss, breakevens and probability of profit."></button>
-            </figure>
-            <div class="pair">
-              <figure class="shot">
-                <figcaption>Trade · Add strategy</figcaption>
-                <button type="button" data-zoom><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" loading="lazy" alt="Strategy picker with neutral shapes such as short straddle, iron butterfly, short strangle and short iron condor."></button>
-              </figure>
-              <figure class="shot">
-                <figcaption>Trade · Baskets</figcaption>
-                <button type="button" data-zoom><img src="assets/screens/baskets.webp" width="2880" height="1120" loading="lazy" alt="Baskets list of saved multi-leg order groups with status and description."></button>
-              </figure>
+          <div class="screen" aria-hidden="true">
+            <div class="chapters"><span class="on" style="--fill: 50%">1 · Build</span><span>2 · Test</span><span>3 · Trade</span></div>
+            <div class="frames">
+              <figure class="shot on"><figcaption>Studio · Strategy canvas</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Strategies</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/strategies.webp" width="2880" height="1120" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Time-travel simulator</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/simulator.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Studio · Simulation reports</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/reports.webp" width="2880" height="1080" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Add strategy</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Options terminal</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Baskets</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/baskets.webp" width="2880" height="1120" alt=""></button></figure>
+              <figure class="shot"><figcaption>Trade · Positions</figcaption><button type="button" class="zoom" tabindex="-1"><img src="assets/screens/positions.webp" width="2880" height="1240" alt=""></button></figure>
             </div>
-            <figure class="shot">
-              <figcaption>Trade · Positions</figcaption>
-              <button type="button" data-zoom><img src="assets/screens/positions.webp" width="2880" height="1240" loading="lazy" alt="Positions table with six open positions across NIFTY, BANKNIFTY, RELIANCE and HDFCBANK, four in profit and two in loss, totalling +₹7,262."></button>
-            </figure>
           </div>
-        </article>
+        </div>
       </div>
     </section>
 
-    <section id="markets" class="wrap" aria-labelledby="markets-title">
-      <div class="section-head">
-        <h2 id="markets-title">Read the market before you place the trade.</h2>
-        <p>Option chain, open interest and historical studies sit next to your strategies, so the research and the order are one click apart.</p>
-      </div>
-      <div class="intel">
-        <figure class="wide">
-          <div class="shot">
-            <figcaption>Studio · Option chain</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="BANKNIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price."></button>
-          </div>
-        </figure>
-        <div class="side">
-          <div>
-            <h3>Option chain</h3>
-            <p>Strike-wise OI, change in OI, IV and Greeks for calls and puts, with the money strikes highlighted.</p>
-          </div>
-          <div>
-            <h3>Open interest</h3>
-            <p>See where support and resistance are building, and how they shift through the day.</p>
-          </div>
-          <div>
-            <h3>Trending OI</h3>
-            <p>Each interval is read as long build-up, short covering, long unwinding or short build-up.</p>
-          </div>
+    <section class="section" id="markets" aria-labelledby="markets-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="markets-title">Read the market before you place the trade.</h2>
+          <p>Option chain, open interest and historical studies sit next to your strategies, so the research and the order are one click apart.</p>
         </div>
-        <figure class="half">
-          <div class="shot">
-            <figcaption>Studio · Open interest</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="Open interest bar chart by strike for BANKNIFTY showing call and put OI with increases and decreases."></button>
-          </div>
-        </figure>
-        <figure class="half">
-          <div class="shot">
-            <figcaption>Studio · Trending OI</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/trending-oi.webp" width="2880" height="1800" loading="lazy" alt="Trending OI table with PCR, OI change and an interpretation such as short covering or long unwinding for each interval."></button>
-          </div>
-        </figure>
-        <figure class="half">
-          <div class="shot">
-            <figcaption>Studio · Thesis library</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/thesis.webp" width="2880" height="1800" loading="lazy" alt="Thesis library with daily movement, weekly and expiry movement, and seasonal movement studies."></button>
-          </div>
-          <p class="cap"><strong>Thesis library.</strong> How far does the index usually move in a day, into expiry, or in a given month? Answered from history.</p>
-        </figure>
-        <figure class="half">
-          <div class="shot">
-            <figcaption>Trade · Charts</figcaption>
-            <button type="button" data-zoom><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="Candlestick chart of NIFTY with a watchlist and drawing tools."></button>
-          </div>
-          <p class="cap"><strong>Charts.</strong> Price action with your watchlist alongside, and layouts saved for next time.</p>
-        </figure>
+
+        <div class="tabs" role="tablist" aria-label="Market data tools">
+          <button class="tab" role="tab" id="t-oc" aria-controls="p-oc" aria-selected="true"><strong>Option chain</strong><small>Strike-wise OI, IV, Greeks</small></button>
+          <button class="tab" role="tab" id="t-oi" aria-controls="p-oi" aria-selected="false" tabindex="-1"><strong>Open interest</strong><small>Support and resistance</small></button>
+          <button class="tab" role="tab" id="t-toi" aria-controls="p-toi" aria-selected="false" tabindex="-1"><strong>Trending OI</strong><small>Build-up and unwinding</small></button>
+          <button class="tab" role="tab" id="t-th" aria-controls="p-th" aria-selected="false" tabindex="-1"><strong>Thesis library</strong><small>Answers from history</small></button>
+          <button class="tab" role="tab" id="t-ch" aria-controls="p-ch" aria-selected="false" tabindex="-1"><strong>Charts</strong><small>Price action, saved layouts</small></button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-oc" aria-labelledby="t-oc">
+          <figure class="shot"><figcaption>Studio · Option chain</figcaption><button type="button" class="zoom"><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="BANKNIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price."></button></figure>
+          <div><h3>The whole chain, at a glance.</h3><p>OI, change in OI, volume, IV and delta for calls and puts, with in-the-money strikes shaded and PCR and max pain on top.</p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-oi" aria-labelledby="t-oi" hidden>
+          <figure class="shot"><figcaption>Studio · Open interest</figcaption><button type="button" class="zoom"><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="Open interest bar chart by strike for BANKNIFTY showing call and put OI with increases and decreases."></button></figure>
+          <div><h3>Where the walls are.</h3><p>Call and put OI by strike, with additions and unwinding marked, so support and resistance are visible before the move.</p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-toi" aria-labelledby="t-toi" hidden>
+          <figure class="shot"><figcaption>Studio · Trending OI</figcaption><button type="button" class="zoom"><img src="assets/screens/trending-oi.webp" width="2880" height="1800" loading="lazy" alt="Trending OI table with PCR, OI change and an interpretation for each interval."></button></figure>
+          <div><h3>Who's in control, interval by interval.</h3><p>Each snapshot is read as long build-up, short covering, long unwinding or short build-up, with PCR alongside.</p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-th" aria-labelledby="t-th" hidden>
+          <figure class="shot"><figcaption>Studio · Thesis library</figcaption><button type="button" class="zoom"><img src="assets/screens/thesis.webp" width="2880" height="1800" loading="lazy" alt="Thesis library with daily movement, weekly and expiry movement, and seasonal movement studies."></button></figure>
+          <div><h3>How far does it usually move?</h3><p>Daily ranges, expiry-to-expiry moves and seasonal patterns, answered from history rather than gut feel.</p></div>
+        </div>
+        <div class="panel" role="tabpanel" id="p-ch" aria-labelledby="t-ch" hidden>
+          <figure class="shot"><figcaption>Trade · Charts</figcaption><button type="button" class="zoom"><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="Candlestick chart of NIFTY with a watchlist and drawing tools."></button></figure>
+          <div><h3>Charts that remember you.</h3><p>Price action with your watchlist alongside, drawing tools, and layouts saved for next time.</p></div>
+        </div>
       </div>
     </section>
 
     <div class="band" id="review">
       <section class="wrap" aria-labelledby="review-title">
-        <div class="section-head">
+        <div class="head">
           <h2 id="review-title">Know what actually worked.</h2>
           <p>Closed trades flow into your journal and P&amp;L automatically. Tag the setup, review the day, and see which ideas earn their keep.</p>
         </div>
         <div class="review">
+          <figure>
+            <div class="shot"><figcaption>Account · P&amp;L heatmap</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-heatmap.webp" width="2880" height="1800" loading="lazy" alt="P&L heatmap calendar for July to September 2026 with green and red days, YTD P&L, best and worst day, and a 65% daily win rate."></button></div>
+            <p class="cap"><strong>P&amp;L heatmap.</strong> Every trading day coloured by result. Click a day to see the trades behind it.</p>
+          </figure>
           <div class="col">
             <figure>
-              <div class="shot">
-                <figcaption>Account · P&amp;L heatmap</figcaption>
-                <button type="button" data-zoom><img src="assets/screens/pnl-heatmap.webp" width="2880" height="1800" loading="lazy" alt="P&L heatmap calendar for July to September 2026 with green and red days, YTD P&L, best and worst day, and a 65% daily win rate."></button>
-              </div>
-              <p class="cap"><strong>P&amp;L heatmap.</strong> Every trading day coloured by result. Click a day to see the trades behind it.</p>
-            </figure>
-          </div>
-          <div class="col">
-            <figure>
-              <div class="shot">
-                <figcaption>Trade · Journal</figcaption>
-                <button type="button" data-zoom><img src="assets/screens/journal.webp" width="2880" height="1800" loading="lazy" alt="Trading journal dashboard with net P&L, P&L by setup and recent entries."></button>
-              </div>
+              <div class="shot"><figcaption>Trade · Journal</figcaption><button type="button" class="zoom"><img src="assets/screens/journal.webp" width="2880" height="1800" loading="lazy" alt="Trading journal dashboard with net P&L, P&L by setup and recent entries."></button></div>
               <p class="cap"><strong>Journal.</strong> P&amp;L by setup, so you know whether breakouts or reversals pay you.</p>
             </figure>
             <figure>
-              <div class="shot">
-                <figcaption>Account · P&amp;L statement</figcaption>
-                <button type="button" data-zoom><img src="assets/screens/pnl-statement.webp" width="2880" height="1800" loading="lazy" alt="P&L statement listing closed trades with quantity, buy and sell averages and realised P&L."></button>
-              </div>
+              <div class="shot"><figcaption>Account · P&amp;L statement</figcaption><button type="button" class="zoom"><img src="assets/screens/pnl-statement.webp" width="2880" height="1800" loading="lazy" alt="P&L statement listing closed trades with quantity, buy and sell averages and realised P&L."></button></div>
               <p class="cap"><strong>Statement.</strong> A clean ledger of closed trades, ready to export as CSV.</p>
             </figure>
           </div>
@@ -443,41 +484,46 @@
       </section>
     </div>
 
-    <section class="wrap" aria-labelledby="platform-title">
-      <div class="section-head">
-        <h2 id="platform-title">Built for how Indian traders work.</h2>
-      </div>
-      <div class="platform">
-        <div><h3>Eight brokers, one screen</h3><p>Connect Zerodha, Upstox, Angel One, Fyers, Groww, Dhan, Kotak Neo or Axis Direct, and see every account together.</p></div>
-        <div><h3>Teams and organisations</h3><p>Place orders for team members, and review group positions, orders and baskets in one place.</p></div>
-        <div><h3>Paper or real</h3><p>Practise with paper trades and keep their results apart from real ones until you're ready.</p></div>
-        <div><h3>Alerts where you are</h3><p>Strategy actions can notify you on Telegram or by email as they happen.</p></div>
-        <div><h3>Signals and strategies marketplace</h3><p>Follow published calls with their tracked outcomes, or list your own strategies for others.</p></div>
-        <div><h3>NSE options first</h3><p>NIFTY, BANKNIFTY and stock options, with weekly and monthly expiries handled for you.</p></div>
+    <section class="section" aria-labelledby="platform-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="platform-title">Built for how Indian traders work.</h2>
+        </div>
+        <div class="platform">
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V10l7-5 7 5v11M9 21v-6h6v6"/></svg><h3>Eight brokers, one screen</h3><p>Connect Zerodha, Upstox, Angel One, Fyers, Groww, Dhan, Kotak Neo or Axis Direct, and see every account together.</p></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c1.8.7 3 2.5 3.5 5.2"/></svg><h3>Teams and organisations</h3><p>Place orders for team members, and review group positions, orders and baskets in one place.</p></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h10l6 6v10H4z"/><path d="M14 4v6h6M8 14h8M8 17h5"/></svg><h3>Paper or real</h3><p>Practise with paper trades and keep their results apart from real ones until you're ready.</p></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg><h3>Alerts where you are</h3><p>Strategy actions can notify you on Telegram or by email as they happen.</p></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9M3 9h18v11H3zM3 9c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg><h3>Signals and strategies marketplace</h3><p>Follow published calls with their tracked outcomes, or list your own strategies for others.</p></div>
+          <div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l5-6 4 3 5-7 4 4"/><path d="M3 21h18"/></svg><h3>NSE options first</h3><p>NIFTY, BANKNIFTY and stock options, with weekly and monthly expiries handled for you.</p></div>
+        </div>
       </div>
     </section>
 
-    <section id="videos" class="wrap" aria-labelledby="videos-title">
-      <div class="section-head">
-        <h2 id="videos-title">See it in action.</h2>
-        <p>Short walkthroughs of the platform, the analysis tools and broker setup.</p>
-      </div>
-      <div class="videos">
-        <div class="video"><button type="button" data-yt="rh3491k725k" aria-label="Play featured DheQuest video"></button></div>
-        <div class="list">
-          <div class="video"><button type="button" data-yt="Ae4kEvll6m4" aria-label="Play DheQuest video 2"></button></div>
-          <div class="video"><button type="button" data-yt="sG32ndis9Ic" aria-label="Play DheQuest video 3"></button></div>
-          <div class="video"><button type="button" data-yt="m9LTi52sn6o" aria-label="Play DheQuest video 4"></button></div>
+    <section class="section" id="videos" aria-labelledby="videos-title">
+      <div class="wrap">
+        <div class="head">
+          <h2 id="videos-title">See it in action.</h2>
+          <p>Short walkthroughs of real strategies, the analysis tools and broker setup.</p>
+        </div>
+        <div class="videos">
+          <div class="video"><button type="button" data-yt="rh3491k725k" aria-label="Play: Automated short straddle adjustments"></button></div>
+          <div class="list">
+            <div class="video"><button type="button" data-yt="Ae4kEvll6m4" aria-label="Play: Automated short strangle adjustments"></button></div>
+            <div class="video"><button type="button" data-yt="sG32ndis9Ic" aria-label="Play: Automated backtesting of trading strategies"></button></div>
+            <div class="video"><button type="button" data-yt="m9LTi52sn6o" aria-label="Play: Open interest, option chain and trending OI"></button></div>
+          </div>
         </div>
       </div>
     </section>
 
     <div class="cta">
+      <svg viewBox="0 0 1600 300" preserveAspectRatio="none" aria-hidden="true"><polyline points="0,270 540,270 650,90 950,90 1060,270 1600,270" fill="none" stroke="#fff" stroke-width="3" vector-effect="non-scaling-stroke"/></svg>
       <div class="wrap">
         <h2>See DheQuest on your own strategy.</h2>
         <div>
           <p>Tell us how you trade today. We'll walk you through building, testing and running it in DheQuest.</p>
-          <a class="btn btn-solid" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
+          <a class="btn" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
         </div>
       </div>
     </div>
@@ -524,25 +570,80 @@
   </dialog>
 
   <script>
-    const nav = document.getElementById('nav');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Nav: transparent over the dark hero, solid after it; mobile toggle
+    const nav = document.getElementById('nav'), hero = document.getElementById('hero');
     const toggle = nav.querySelector('.nav-toggle');
     toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', nav.classList.toggle('open')));
     nav.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', false); }));
-    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
 
+    // Hero: screenshot tilts flat and floating cards settle as you scroll
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(() => {
+        const h = hero.offsetHeight;
+        nav.classList.toggle('solid', scrollY > h - 80);
+        nav.classList.toggle('dark', scrollY > 10 && scrollY <= h - 80);
+        if (!reduce) hero.style.setProperty('--p', Math.min(1, scrollY / (h * 0.45)).toFixed(3));
+        ticking = false;
+      });
+    };
+    addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+    // Story: the beat crossing the middle of the viewport picks the screen and chapter
+    const frames = document.querySelectorAll('.frames .shot');
+    const chaps = document.querySelectorAll('.chapters span');
+    const beats = [...document.querySelectorAll('.beat')];
+    const perChap = [0, 0, 0]; beats.forEach(b => perChap[b.dataset.chap]++);
+    const storyObs = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const b = e.target, f = +b.dataset.frame, c = +b.dataset.chap;
+      const seen = beats.filter(x => +x.dataset.chap === c && +x.dataset.frame <= f).length;
+      beats.forEach(x => x.classList.toggle('on', x === b));
+      frames.forEach((x, i) => x.classList.toggle('on', i === f));
+      chaps.forEach((x, i) => { x.classList.toggle('on', i === c); x.style.setProperty('--fill', i < c ? '100%' : i === c ? (seen / perChap[c] * 100) + '%' : '0%'); });
+    }), { rootMargin: '-45% 0px -45% 0px' });
+    beats.forEach(b => storyObs.observe(b));
+
+    // Market tabs: auto-advance with a progress bar; pauses on hover or off-screen, stops once clicked
+    const tablist = document.querySelector('.tabs'), tabs = [...tablist.querySelectorAll('.tab')];
+    const select = (t, focus) => {
+      tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', on); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+      if (focus) t.focus();
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => { tablist.classList.add('manual'); select(t); });
+      t.addEventListener('keydown', e => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (d) { tablist.classList.add('manual'); select(tabs[(i + d + tabs.length) % tabs.length], true); }
+      });
+      t.addEventListener('animationend', () => { if (!tablist.classList.contains('manual')) select(tabs[(i + 1) % tabs.length]); });
+    });
+    if (reduce) tablist.classList.add('manual');
+    const markets = document.getElementById('markets');
+    let hovering = false, visible = false;
+    const syncPause = () => tablist.classList.toggle('paused', hovering || !visible);
+    markets.addEventListener('mouseenter', () => { hovering = true; syncPause(); });
+    markets.addEventListener('mouseleave', () => { hovering = false; syncPause(); });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; syncPause(); }, { threshold: .35 }).observe(markets);
+    syncPause();
+
+    // Lightbox
     const box = document.getElementById('lightbox'), boxImg = box.querySelector('img');
-    document.querySelectorAll('[data-zoom]').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('.zoom').forEach(b => b.addEventListener('click', () => {
       const img = b.querySelector('img'); boxImg.src = img.src; boxImg.alt = img.alt; box.showModal();
     }));
     box.addEventListener('click', e => { if (e.target === box) box.close(); });
 
-    // Load YouTube only when asked: thumbnail first, iframe on click
+    // YouTube: thumbnail first, iframe only on click
     document.querySelectorAll('[data-yt]').forEach(b => {
       b.style.backgroundImage = `url(https://i.ytimg.com/vi/${b.dataset.yt}/hqdefault.jpg)`;
       b.addEventListener('click', () => {
         const f = document.createElement('iframe');
         f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1`;
-        f.title = b.getAttribute('aria-label').replace('Play ', '');
+        f.title = b.getAttribute('aria-label').replace('Play: ', '');
         f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
         b.replaceWith(f);
       });
