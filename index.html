@@ -1,587 +1,553 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="https://i.ibb.co/24Qy7m1/Dhe-Quest64.png" />
-  <title>DheQuest | Automate, Analyze, and Trade Smarter with Next-Gen Tools</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DheQuest | Build, backtest and trade options strategies</title>
+  <meta name="description" content="DheQuest lets you draw an options strategy as a flow, replay it against past sessions, and trade it through your broker, with option chain, OI analytics, a journal and P&L heatmaps in one place.">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --theme-color: #4ca8b4;
-      --primary-color: #4ca8b4;
-      --primary-color-hover: #2e8c99;
-      --primary-color-click: #0096aa;
+      --ink: #0f2b30;
+      --ink-soft: #46636a;
+      --paper: #f4f7f6;
+      --surface: #ffffff;
+      --line: #d7e2e0;
+      --teal: #237a86;
+      --teal-bright: #4ca8b4;
+      --teal-wash: #e3f1f2;
+      --gain: #178a4a;
+      --loss: #cf4545;
+      --display: 'Schibsted Grotesk', system-ui, sans-serif;
+      --body: 'IBM Plex Sans', system-ui, sans-serif;
+      --wrap: 1180px;
+      --radius-lg: 14px;
+      --radius-sm: 8px;
     }
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 1.0625rem/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: var(--teal); }
+    h1, h2, h3 { font-family: var(--display); line-height: 1.08; margin: 0; letter-spacing: -0.02em; }
+    p { margin: 0; }
+    :focus-visible { outline: 3px solid var(--teal-bright); outline-offset: 3px; border-radius: 4px; }
+    .wrap { width: min(var(--wrap), 100% - 32px); margin-inline: auto; }
 
-    header {
-      background-color: #4ca8b4;
-      color: white;
-      padding: 20px 0;
-      text-align: center;
-    }
+    /* Nav */
+    .nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .nav.scrolled { border-bottom-color: var(--line); }
+    .nav .wrap { display: flex; align-items: center; gap: 32px; height: 64px; }
+    .nav-logo img { height: 30px; width: auto; }
+    .nav-links { display: flex; gap: 28px; margin-left: auto; }
+    .nav-links a { color: var(--ink); text-decoration: none; font-weight: 500; font-size: .95rem; }
+    .nav-links a:hover { color: var(--teal); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 999px; font: 600 .95rem/1 var(--body); text-decoration: none; border: 1.5px solid var(--ink); color: var(--ink); background: transparent; cursor: pointer; }
+    .btn-solid { background: var(--ink); color: #fff; }
+    .btn-solid:hover { background: var(--teal); border-color: var(--teal); }
+    .btn:not(.btn-solid):hover { background: var(--surface); }
+    .nav .btn { padding: 10px 16px; }
+    .nav-toggle { display: none; margin-left: auto; background: none; border: 0; padding: 8px; cursor: pointer; color: var(--ink); }
 
-    h1 {
-      font-size: 2.5rem;
-      margin: 0;
-    }
+    /* Hero */
+    .hero { padding: 72px 0 0; overflow: hidden; }
+    .hero-copy { max-width: 760px; }
+    .hero h1 { font-size: clamp(2.6rem, 6.4vw, 5rem); font-weight: 800; }
+    .hero-lede { margin-top: 24px; font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--ink-soft); max-width: 58ch; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    .hero-stage { position: relative; margin-top: 40px; }
+    .payoff { display: block; width: 100%; height: clamp(120px, 18vw, 220px); margin-bottom: -28px; position: relative; z-index: 0; }
+    .payoff .curve { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round; stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: draw 1.8s .2s cubic-bezier(.6,0,.2,1) forwards; }
+    .payoff .zero { stroke: var(--ink); stroke-opacity: .25; stroke-dasharray: 4 6; }
+    .payoff .gain { fill: var(--gain); fill-opacity: .14; }
+    .payoff .loss { fill: var(--loss); fill-opacity: .12; }
+    .payoff .fills { opacity: 0; animation: fade .6s 1.6s forwards; }
+    .payoff text { font: 600 13px var(--body); fill: var(--ink-soft); opacity: 0; animation: fade .6s 1.8s forwards; }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    @keyframes fade { to { opacity: 1; } }
+    .hero .shot { position: relative; z-index: 1; }
 
-    h2 {
-      font-size: 2rem;
-      margin-top: 20px;
-      color: #343a40;
-    }
+    /* Screenshot frame */
+    .shot { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); box-shadow: 0 30px 60px -30px rgba(15, 43, 48, .35), 0 2px 6px rgba(15, 43, 48, .06); overflow: hidden; }
+    .shot figcaption { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: .82rem; color: var(--ink-soft); background: #fbfcfc; }
+    .shot figcaption::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--teal-bright); box-shadow: 14px 0 0 var(--line), 28px 0 0 var(--line); margin-right: 28px; }
+    .shot button { all: unset; display: block; cursor: zoom-in; width: 100%; }
+    .shot button:focus-visible { outline: 3px solid var(--teal-bright); outline-offset: -3px; }
+    figure { margin: 0; }
 
-    section {
-      padding: 40px 20px;
-    }
+    /* Brokers strip */
+    .brokers { margin-top: 72px; padding: 28px 0; border-block: 1px solid var(--line); }
+    .brokers .wrap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px 36px; }
+    .brokers p { font-weight: 600; }
+    .brokers ul { display: flex; flex-wrap: wrap; gap: 8px 28px; list-style: none; margin: 0; padding: 0; color: var(--ink-soft); font-family: var(--display); font-weight: 700; font-size: 1.15rem; }
 
-    .card {
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+    /* Section heads */
+    section { padding: 112px 0 0; }
+    .section-head { max-width: 680px; margin-bottom: 56px; }
+    .section-head h2 { font-size: clamp(2rem, 4vw, 3.1rem); font-weight: 800; }
+    .section-head p { margin-top: 16px; color: var(--ink-soft); font-size: 1.15rem; }
 
-    .card-title {
-      font-size: 1.5rem;
-      color: #4ca8b4;
-    }
+    /* Build / Test / Trade flow */
+    .flow { position: relative; }
+    .step { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 56px; position: relative; padding-left: 56px; padding-bottom: 96px; }
+    .step::before { content: ''; position: absolute; left: 15px; top: 34px; bottom: 0; border-left: 2px solid var(--line); }
+    .step:last-child::before { bottom: auto; height: 0; }
+    .step-marker { position: absolute; left: 0; top: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--surface); border: 2px solid var(--teal); display: grid; place-items: center; font: 700 .9rem var(--display); color: var(--teal); }
+    .step-copy { position: sticky; top: 100px; align-self: start; }
+    .step-copy h3 { font-size: clamp(1.7rem, 2.8vw, 2.3rem); font-weight: 800; }
+    .step-copy > p { margin-top: 14px; color: var(--ink-soft); }
+    .points { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 14px; }
+    .points li { padding-left: 18px; position: relative; }
+    .points li::before { content: ''; position: absolute; left: 0; top: .7em; width: 8px; height: 2px; background: var(--teal); }
+    .points strong { font-weight: 600; }
+    .note { margin-top: 24px; padding: 14px 16px; border-radius: var(--radius-sm); background: var(--teal-wash); font-size: .95rem; }
+    .stack { display: grid; gap: 28px; align-self: start; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
-    .card-text {
-      font-size: 1rem;
-      color: #6c757d;
-    }
+    /* Market intelligence */
+    .intel { display: grid; grid-template-columns: repeat(6, 1fr); gap: 24px; }
+    .intel .wide { grid-column: span 4; }
+    .intel .side { grid-column: span 2; display: grid; gap: 16px; align-content: start; }
+    .intel .side h3 { font-size: 1.35rem; }
+    .intel .side p { color: var(--ink-soft); }
+    .intel .half { grid-column: span 3; }
+    .intel .third { grid-column: span 2; }
+    .cap { margin-top: 12px; font-size: .95rem; color: var(--ink-soft); }
+    .cap strong { color: var(--ink); font-weight: 600; }
 
-    .video-section {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+    /* Review band */
+    .band { margin-top: 112px; background: var(--ink); color: #e8f1f0; padding: 112px 0; }
+    .band section { padding: 0; }
+    .band .section-head p { color: #a9c3c1; }
+    .band .shot { border-color: #24474c; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+    .band .cap { color: #a9c3c1; }
+    .band .cap strong { color: #fff; }
+    .review { display: grid; grid-template-columns: 7fr 5fr; gap: 24px; align-items: start; }
+    .review .col { display: grid; gap: 24px; align-content: start; }
 
-    .video-section video {
-      max-width: 100%;
-      border-radius: 10px;
-    }
-    body { background: #f7f9fc; font-family: 'Segoe UI', Arial, sans-serif; }
-    .navbar { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .navbar-brand { font-weight: bold; color: var(--theme-color) !important; font-size: 1rem; }
-    .nav-link, .navbar-nav .nav-link.active { color: #222 !important; font-weight: 500; }
-    .btn-outline-secondary {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-      background: transparent;
-    }
-    .btn-outline-secondary:hover,
-    .btn-outline-secondary:focus {
-      background: var(--primary-color-hover) !important;
-      color: #fff !important;
-      border-color: var(--primary-color-hover) !important;
-    }
-    .btn-outline-secondary:active {
-      background: var(--primary-color-click) !important;
-      color: #fff !important;
-      border-color: var(--primary-color-click) !important;
-    }
-    .hero {
-      position: relative;
-      padding: 0;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: url("https://i.ibb.co/rRr2vq0T/sl-122221-47450-06.jpg") no-repeat center center/cover;
-      opacity: 0.55;
-      z-index: 0;
-    }
-    .hero .container {
-      position: relative;
-      z-index: 2;
-    }
-    .hero-title { font-size: 2rem; font-weight: 700; }
-    .hero-title .highlight { color: var(--theme-color) !important; }
-    .section-title .highlight { color: var(--theme-color) !important; }
-    .lead { font-size: 1rem; color: #555; }
-    .hero-content-animate, .hero-image-animate {
-      opacity: 0;
-      transform: translateY(40px);
-      animation: fadeUp 1s ease-out forwards;
-    }
-    .hero-image-animate {
-      animation-delay: 0.3s;
-    }
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-    .hero-img { border-radius: 8px; box-shadow: 0 8px 16px rgba(76,168,180,0.8); }
-    .section-title { font-size: 2rem; font-weight: 700; margin-bottom: 24px; }
-    .feature-card { background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); padding: 24px; margin-bottom: 24px; }
-    .feature-icon { font-size: 2rem; color: var(--theme-color); margin-right: 12px; }
-    .screenshot { border-radius: 14px; box-shadow: 0 4px 24px rgba(76,168,180,0.10); width: 100%; }
-    .video-section { background: #eef2fa; padding: 60px 0; }
-    .featured-video { border-radius: 14px; box-shadow: 0 4px 24px rgba(76,168,180,0.10); }
-    .badge-primary { background: var(--theme-color); }
-    footer {
-      /* background: linear-gradient(90deg, #f5f0ff 0%, #ece6fa 100%); */
-      background: #edfcff;
+    /* Platform list */
+    .platform { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+    .platform div { padding: 28px 28px 28px 0; border-bottom: 1px solid var(--line); }
+    .platform div:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
+    .platform h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; }
+    .platform p { margin-top: 8px; color: var(--ink-soft); font-size: .98rem; }
 
-      padding: 3rem 0 1rem 0;
-      font-size: 1rem;
-      color: #444;
-      border-top: 1px solid #eee;
-    }
-    .footer-brand {
-      font-weight: 700;
-      font-size: 1.3rem;
-      color: var(--theme-color);
-      margin-bottom: 1rem;
-      display: block;
-    }
-    .footer-desc {
-      color: #888;
-      font-size: 1rem;
-      margin-bottom: 1.5rem;
-      max-width: 300px;
-    }
-    .footer-links a {
-      color: #222;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
-      font-size: 1rem;
-    }
-    .footer-links a:hover {
-      color: var(--theme-color);
-      text-decoration: underline;
-    }
-    .footer-contact {
-      font-size: 1rem;
-      color: #444;
-    }
-    .footer-contact i {
-      color: var(--theme-color);
-      margin-right: 0.5rem;
-    }
-    .footer-social a {
-      color: #888;
-      font-size: 1.2rem;
-      margin-right: 1rem;
-      transition: color 0.2s;
-    }
-    .footer-social a:hover {
-      color: var(--theme-color);
-    }
-    .footer-bottom {
-      border-top: 1px solid #eee;
-      margin-top: 2rem;
-      padding-top: 1rem;
-      font-size: 0.95rem;
-      color: #888;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .footer-bottom a {
-      color: #888;
-      margin-left: 1.5rem;
-      text-decoration: none;
-      font-size: 0.95rem;
-    }
-    .footer-bottom a:hover {
-      color: var(--theme-color);
-      text-decoration: underline;
-    }
-    @media (max-width: 767px) {
-      .footer-bottom {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .footer-bottom a {
-        margin-left: 0;
-        margin-right: 1rem;
-      }
-    }
-    .custom-height {
-      height: auto;
-    }
+    /* Videos */
+    .videos { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; }
+    .videos .list { display: grid; gap: 16px; align-content: start; }
+    .video { border-radius: var(--radius-lg); overflow: hidden; background: #000; aspect-ratio: 16 / 9; position: relative; }
+    .video iframe, .video button { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video button { cursor: pointer; padding: 0; background: #000 center / cover no-repeat; }
+    .video button::after { content: ''; position: absolute; left: 50%; top: 50%; width: 64px; height: 64px; translate: -50% -50%; border-radius: 50%; background: rgba(255,255,255,.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8 5v14l11-7z' fill='%230f2b30'/%3E%3C/svg%3E") center / 28px no-repeat; }
+    .videos .list .video button::after { width: 44px; height: 44px; background-size: 20px; }
 
-    @media (min-width: 992px) {
-      .custom-height {
-        height: 100vh;
-      }
-    }
-    #timer h3 {
-      font-weight: 700;
-      color: var(--theme-color);
-    }
-    #timer small {
-      font-size: 0.9rem;
-      color: #666;
-    }
+    /* CTA */
+    .cta { padding: 128px 0 112px; }
+    .cta .wrap { display: grid; grid-template-columns: 3fr 2fr; gap: 48px; align-items: end; }
+    .cta h2 { font-size: clamp(2.2rem, 5vw, 4rem); font-weight: 800; }
+    .cta p { color: var(--ink-soft); margin-bottom: 24px; font-size: 1.1rem; }
 
-    .countdown-card {
-      background: #fff;
-      padding: 20px 16px;
-      border-radius: 12px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-      text-align: center;
-      min-width: 100px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
+    /* Footer */
+    footer { border-top: 1px solid var(--line); padding: 56px 0 32px; font-size: .95rem; }
+    .foot { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 40px; }
+    .foot h4 { margin: 0 0 12px; font: 600 .95rem var(--body); }
+    .foot a { color: var(--ink-soft); text-decoration: none; display: block; padding: 3px 0; }
+    .foot a:hover { color: var(--teal); }
+    .foot .about p { color: var(--ink-soft); margin: 14px 0 18px; max-width: 36ch; }
+    .social { display: flex; gap: 10px; }
+    .social a { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 50%; padding: 0; color: var(--ink); }
+    .social a:hover { border-color: var(--teal); }
+    .social svg { width: 16px; height: 16px; fill: currentColor; }
+    .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: .88rem; }
+    .legal nav { display: flex; gap: 20px; }
+    .legal a { color: var(--ink-soft); display: inline; }
+    .disclaimer { margin-top: 16px; color: var(--ink-soft); font-size: .82rem; max-width: 90ch; }
 
-    .countdown-card h3 {
-      font-weight: 700;
-      color: var(--theme-color);
-      font-size: 2.2rem;
-    }
+    /* Lightbox */
+    dialog.lightbox { border: 0; padding: 0; background: transparent; max-width: min(1400px, 96vw); max-height: 94vh; }
+    dialog.lightbox::backdrop { background: rgba(10, 30, 34, .82); }
+    dialog.lightbox img { max-height: 90vh; width: auto; border-radius: var(--radius-sm); }
+    dialog.lightbox form { position: fixed; top: 16px; right: 16px; }
+    dialog.lightbox button { width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; font-size: 1.4rem; cursor: pointer; }
 
-    .countdown-card small {
-      display: block;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      color: #555;
-      font-weight: 500;
+    /* Responsive */
+    @media (max-width: 960px) {
+      .step { grid-template-columns: 1fr; gap: 32px; padding-left: 48px; }
+      .step-copy { position: static; }
+      .intel .wide, .intel .side, .intel .half, .intel .third { grid-column: span 6; }
+      .review, .videos, .cta .wrap { grid-template-columns: 1fr; }
+      .platform { grid-template-columns: 1fr 1fr; }
+      .platform div:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
+      .platform div:nth-child(even) { padding-left: 24px; border-left: 1px solid var(--line); }
+      .foot { grid-template-columns: 1fr 1fr; }
+      .foot .about { grid-column: 1 / -1; }
     }
-
-    .countdown-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 6px 20px rgba(76, 168, 180, 0.15);
+    @media (max-width: 720px) {
+      .nav-toggle { display: block; }
+      .nav-links { display: none; position: absolute; top: 64px; left: 0; right: 0; flex-direction: column; gap: 0; background: var(--paper); border-bottom: 1px solid var(--line); padding: 8px 16px 16px; }
+      .nav-links a { padding: 12px 0; }
+      .nav.open .nav-links { display: flex; }
+      .nav .btn { display: none; }
+      .hero { padding-top: 48px; }
+      section { padding-top: 80px; }
+      .band { margin-top: 80px; padding: 80px 0; }
+      .step { padding-left: 0; padding-bottom: 72px; }
+      .step::before { display: none; }
+      .step-marker { position: static; margin-bottom: 14px; }
+      .pair, .platform { grid-template-columns: 1fr; }
+      .platform div:nth-child(even) { padding-left: 0; border-left: 0; }
+      .platform div { padding-right: 0; }
+      .foot { grid-template-columns: 1fr; }
     }
-
-    @media (max-width: 576px) {
-    .countdown-card {
-      min-width: 80px;
-      padding: 16px 12px;
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .payoff .curve { animation: none; stroke-dashoffset: 0; }
+      .payoff .fills, .payoff text { animation: none; opacity: 1; }
     }
-
-    .countdown-card h3 {
-      font-size: 1.8rem;
-    }
-
-    .countdown-card small {
-      font-size: 0.85rem;
-    }
-  }
-
   </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light sticky-top px-3">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="https://i.ibb.co/qYhSRLJ4/Dhe-Quest128-Full.png" alt="DheQuest" width="auto" height="32" class="me-2" style="border-radius:8px;">
-        <!-- <span style="font-weight:700; font-size:1.5rem; color:var(--theme-color); letter-spacing:-1px;">SSPART</span> -->
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+  <header class="nav" id="nav">
+    <div class="wrap">
+      <a class="nav-logo" href="#top" aria-label="DheQuest home"><img src="assets/logo.png" alt="DheQuest" width="128" height="30"></a>
+      <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav mr-3">
-          <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-          <li class="nav-item"><a class="nav-link active" href="#features">Features</a></li>
-          <li class="nav-item"><a class="nav-link" href="#videos">Videos</a></li>
+      <nav class="nav-links" id="nav-links">
+        <a href="#workflow">How it works</a>
+        <a href="#markets">Market data</a>
+        <a href="#review">Journal &amp; P&amp;L</a>
+        <a href="#videos">Videos</a>
+      </nav>
+      <a class="btn btn-solid" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div class="wrap">
+        <div class="hero-copy">
+          <h1>Your options desk, from idea to order.</h1>
+          <p class="hero-lede">Draw a strategy as a flow of rules, replay it against past sessions, then trade it through your own broker. No code, no spreadsheets, no switching between five tabs.</p>
+          <div class="hero-actions">
+            <a class="btn btn-solid" href="#workflow">See how it works</a>
+            <a class="btn" href="#videos">Watch the videos</a>
+          </div>
+        </div>
+
+        <div class="hero-stage">
+          <!-- Short iron condor payoff: loss wings, flat profit plateau -->
+          <svg class="payoff" viewBox="0 0 1180 220" preserveAspectRatio="none" aria-hidden="true">
+            <line class="zero" x1="0" y1="130" x2="1180" y2="130"/>
+            <g class="fills">
+              <polygon class="loss" points="0,190 380,190 432,130 0,130"/>
+              <polygon class="gain" points="432,130 470,70 710,70 748,130"/>
+              <polygon class="loss" points="748,130 800,190 1180,190 1180,130"/>
+            </g>
+            <polyline class="curve" points="0,190 380,190 470,70 710,70 800,190 1180,190"/>
+            <text x="532" y="56">Max profit</text>
+          </svg>
+          <figure class="shot">
+            <figcaption>Studio · Strategy canvas</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/strategy-canvas.webp" width="2880" height="1800" alt="Strategy canvas showing a NIFTY short straddle: sell ATM call and put, then exit on whichever comes first of a 15:20 time stop, a ₹4,000 loss stop or a ₹3,000 profit target." fetchpriority="high"></button>
+          </figure>
+        </div>
+      </div>
+    </div>
+
+    <div class="brokers">
+      <div class="wrap">
+        <p>Trade through the broker you already use</p>
+        <ul>
+          <li>Zerodha</li><li>Upstox</li><li>Angel One</li><li>Fyers</li><li>Groww</li><li>Dhan</li><li>Kotak Neo</li><li>Axis Direct</li>
         </ul>
       </div>
     </div>
-  </nav>
 
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <div class="container">
-      <div class="row align-items-center py-5 custom-height">
-        <!-- <div class="row align-items-center py-5 py-lg-0"> -->
-
-        <div class="col-lg-5 mb-lg-0 hero-content-animate p-4 order-2 order-lg-1">
-          <h1 class="hero-title">
-            Automate Your Trading<br>with <span class="highlight">DheQuest</span>
-          </h1>
-          <p class="lead mt-3">
-            Your intelligent trading companion that combines automated trading, advanced market analysis, and multi-broker integration into one powerful platform. Trade smarter, not harder.
-          </p>
-          <a href="#videos" class="btn btn-outline-secondary mt-4">Watch Videos</a>
-        </div>
-        <div class="col-lg-7 text-center hero-image-animate p-4 order-1 order-lg-2">
-          <img src="https://i.ibb.co/G3QVJNsx/overview.png" alt="DheQuest Dashboard" class="hero-img img-fluid" />
-        </div>
+    <section id="workflow" class="wrap" aria-labelledby="workflow-title">
+      <div class="section-head">
+        <h2 id="workflow-title">Build it, test it, then trade it.</h2>
+        <p>Every strategy moves through the same three steps, in the same workspace, on the same data.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- Features Section -->
-  <section id="features" class="py-5">
-    <div class="container">
-      <h2 class="section-title text-center">Powerful Features for <span class="highlight">Smart Trading</span></h2>
-      <div class="row align-items-center">
-        <div class="col-lg-6 mb-4 mb-lg-0 order-2 order-lg-1">
-          <h2 class="section-title">Powerful Trading Dashboard</h2>
-          <p>Manage your entire trading workflow with real-time insights and intuitive tools.</p>
+      <div class="flow">
+        <article class="step">
+          <span class="step-marker" aria-hidden="true">1</span>
+          <div class="step-copy">
+            <h3>Build</h3>
+            <p>Lay out entries, exits and stops as blocks on a canvas. You can read the logic at a glance, and so can anyone you share it with.</p>
+            <ul class="points">
+              <li><strong>Logic blocks.</strong> Combine conditions with AND, OR, ANY and IF branches.</li>
+              <li><strong>Actions.</strong> Buy, sell, modify, square off or send yourself an alert.</li>
+              <li><strong>Versions.</strong> Every save is kept, so you can compare and roll back.</li>
+            </ul>
+            <p class="note">When a strategy is ready, deploy it and DheQuest runs it live through your connected broker.</p>
+          </div>
+          <div class="stack">
+            <figure class="shot">
+              <figcaption>Studio · Strategies</figcaption>
+              <button type="button" data-zoom><img src="assets/screens/strategies.webp" width="2880" height="1120" loading="lazy" alt="Strategy library listing five strategies such as NIFTY Short Straddle, Opening Range Breakout and Expiry Day Iron Fly, with instrument, status and last modified date."></button>
+            </figure>
+          </div>
+        </article>
 
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128065;</span> <!-- 👁️ for watchlists -->
-            <div>
-              <h5>Smart Watchlists</h5>
-              <p>Track market movers and personal favorites in one place.</p>
+        <article class="step">
+          <span class="step-marker" aria-hidden="true">2</span>
+          <div class="step-copy">
+            <h3>Test</h3>
+            <p>Run the strategy over months of past sessions before any real money is involved, or step through a single day bar by bar.</p>
+            <ul class="points">
+              <li><strong>Backtest reports.</strong> Entries, win rate and net P&amp;L for every run.</li>
+              <li><strong>Time-travel simulator.</strong> Replay any historical session and practise positions as the day unfolds.</li>
+              <li><strong>Paper trading.</strong> Keep paper and real results separate, or view them combined.</li>
+            </ul>
+          </div>
+          <div class="stack">
+            <figure class="shot">
+              <figcaption>Studio · Time-travel simulator</figcaption>
+              <button type="button" data-zoom><img src="assets/screens/simulator.webp" width="2880" height="1800" loading="lazy" alt="Time-travel simulator replaying a NIFTY session from July 2026 with playback controls and open interest by strike."></button>
+            </figure>
+            <figure class="shot">
+              <figcaption>Studio · Simulation reports</figcaption>
+              <button type="button" data-zoom><img src="assets/screens/reports.webp" width="2880" height="1080" loading="lazy" alt="Simulation reports summary showing simulated P&L of ₹1,250 and a 55% average win rate."></button>
+            </figure>
+          </div>
+        </article>
+
+        <article class="step">
+          <span class="step-marker" aria-hidden="true">3</span>
+          <div class="step-copy">
+            <h3>Trade</h3>
+            <p>Price a multi-leg position against the live chain, see the payoff before you send it, then manage everything from one positions screen.</p>
+            <ul class="points">
+              <li><strong>Options terminal.</strong> Pick a ready-made shape or add legs yourself. See max profit, max loss, breakevens and probability of profit.</li>
+              <li><strong>Baskets.</strong> Save a group of orders and place them together.</li>
+              <li><strong>Positions and orders.</strong> Live P&amp;L across every account you trade, with one-click square off.</li>
+            </ul>
+          </div>
+          <div class="stack">
+            <figure class="shot">
+              <figcaption>Trade · Options terminal</figcaption>
+              <button type="button" data-zoom><img src="assets/screens/terminal-payoff.webp" width="2880" height="1800" loading="lazy" alt="Options terminal with a four-leg NIFTY short iron condor, its payoff graph, max profit, max loss, breakevens and probability of profit."></button>
+            </figure>
+            <div class="pair">
+              <figure class="shot">
+                <figcaption>Trade · Add strategy</figcaption>
+                <button type="button" data-zoom><img src="assets/screens/terminal-strategy-picker.webp" width="2880" height="1800" loading="lazy" alt="Strategy picker with neutral shapes such as short straddle, iron butterfly, short strangle and short iron condor."></button>
+              </figure>
+              <figure class="shot">
+                <figcaption>Trade · Baskets</figcaption>
+                <button type="button" data-zoom><img src="assets/screens/baskets.webp" width="2880" height="1120" loading="lazy" alt="Baskets list of saved multi-leg order groups with status and description."></button>
+              </figure>
             </div>
+            <figure class="shot">
+              <figcaption>Trade · Positions</figcaption>
+              <button type="button" data-zoom><img src="assets/screens/positions.webp" width="2880" height="1240" loading="lazy" alt="Positions table with six open positions across NIFTY, BANKNIFTY, RELIANCE and HDFCBANK, four in profit and two in loss, totalling +₹7,262."></button>
+            </figure>
           </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128230;</span> <!-- 🗂️ for baskets -->
-            <div>
-              <h5>Strategy Baskets</h5>
-              <p>Create and execute grouped trades with a single click.</p>
-            </div>
-          </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128179;</span> <!-- 💳 for orders/positions -->
-            <div>
-              <h5>Live Orders & Positions</h5>
-              <p>Real-time updates on all your trades and holdings.</p>
-            </div>
-          </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128202;</span> <!-- 📊 for payoff graph -->
-            <div>
-              <h5>Payoff Visualizer</h5>
-              <p>Instantly see risk/reward curves for any options strategy.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-6 position-relative text-center order-1 order-lg-2 pb-4">
-          <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
-            <!-- Foreground -->
-            <img src="https://i.ibb.co/Q3XR9S93/Terminal1.png"
-                alt="Broker Screenshot"
-                class="img-fluid rounded shadow-lg"
-                style="width: 80%; position: relative; z-index: 2; transform: rotate(-5deg);" />
-            <!-- Background - Rotated slightly -->
-            <img src="https://i.ibb.co/zhLr8DGM/Terminal.png"
-                alt="Analytics Screenshot"
-                class="img-fluid rounded shadow position-absolute"
-                style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(5deg);" />
-          </div>
-        </div>
+        </article>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Analysis Section -->
-  <section id="analysis" class="py-5 bg-white">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 position-relative text-center pb-4">
-          <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
-            <!-- Foreground -->
-            <img src="https://i.ibb.co/c9G3h5d/sim1.png"
-                alt="Broker Screenshot"
-                class="img-fluid rounded shadow-lg"
-                style="width: 80%; position: relative; z-index: 2; transform: rotate(5deg);" />
-            <!-- Background - Rotated slightly -->
-            <img src="https://i.ibb.co/1YDRwpq8/sim2.png"
-                alt="Analytics Screenshot"
-                class="img-fluid rounded shadow position-absolute"
-                style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(-5deg);" />
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <h2 class="section-title">Automated Trading Intelligence</h2>
-          <p>End-to-end simulation, automation, and live trading — all in one powerful platform.</p>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128295;</span> <!-- ⚙️ Manual Simulator -->
-            <div>
-              <h5>Manual Simulator</h5>
-              <p>Test your ideas with interactive, rule-based simulations.</p>
-            </div>
-          </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#129302;</span> <!-- 🤖 Auto Simulator -->
-            <div>
-              <h5>Automated Strategies</h5>
-              <p>Create and run logic-based strategies for hands-free trading.</p>
-            </div>
-          </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128640;</span> <!-- 🚀 Live Execution -->
-            <div>
-              <h5>Live Execution</h5>
-              <p>Seamless integration with brokers for real-time trading.</p>
-            </div>
-          </div>
-
-          <div class="feature-card d-flex align-items-start">
-            <span class="feature-icon">&#128202;</span> <!-- 📊 Results -->
-            <div>
-              <h5>Simulated Performance</h5>
-              <p>Get detailed reports and insights on strategy outcomes.</p>
-            </div>
-          </div>
-        </div>
-
+    <section id="markets" class="wrap" aria-labelledby="markets-title">
+      <div class="section-head">
+        <h2 id="markets-title">Read the market before you place the trade.</h2>
+        <p>Option chain, open interest and historical studies sit next to your strategies, so the research and the order are one click apart.</p>
       </div>
-    </div>
-  </section>
-
-  <!-- Multi-Broker Section -->
-  <section id="brokers" class="py-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 order-2 order-lg-1">
-        <h2 class="section-title">Market Insights & Analysis</h2>
-        <p>Decode market behavior through powerful tools and data-backed insights.</p>
-        <div class="feature-card d-flex align-items-start">
-          <span class="feature-icon">&#128200;</span> <!-- 📈 -->
+      <div class="intel">
+        <figure class="wide">
+          <div class="shot">
+            <figcaption>Studio · Option chain</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/option-chain.webp" width="2880" height="1800" loading="lazy" alt="BANKNIFTY option chain with OI, change in OI, volume, IV, delta and LTP for calls and puts around the spot price."></button>
+          </div>
+        </figure>
+        <div class="side">
           <div>
-            <h5>Option Chain</h5>
-            <p>Detailed strike-wise view of options with live and historical data.</p>
+            <h3>Option chain</h3>
+            <p>Strike-wise OI, change in OI, IV and Greeks for calls and puts, with the money strikes highlighted.</p>
           </div>
-        </div>
-        <div class="feature-card d-flex align-items-start">
-          <span class="feature-icon">&#128202;</span> <!-- 📊 -->
           <div>
-            <h5>Open Interest Analysis</h5>
-            <p>Uncover market positioning with real-time OI build-up and unwinding.</p>
+            <h3>Open interest</h3>
+            <p>See where support and resistance are building, and how they shift through the day.</p>
           </div>
-        </div>
-        <div class="feature-card d-flex align-items-start">
-          <span class="feature-icon">&#128293;</span> <!-- 🔥 -->
           <div>
-            <h5>Trending OI</h5>
-            <p>Identify surging contracts and high-interest zones across the chain.</p>
+            <h3>Trending OI</h3>
+            <p>Each interval is read as long build-up, short covering, long unwinding or short build-up.</p>
           </div>
         </div>
-        <div class="feature-card d-flex align-items-start">
-          <span class="feature-icon">&#128221;</span> <!-- 📝 -->
-          <div>
-            <h5>Historical Thesis</h5>
-            <p>Understand market context with past trend analysis and stats-backed narratives.</p>
+        <figure class="half">
+          <div class="shot">
+            <figcaption>Studio · Open interest</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/open-interest.webp" width="2880" height="1800" loading="lazy" alt="Open interest bar chart by strike for BANKNIFTY showing call and put OI with increases and decreases."></button>
           </div>
-        </div>
+        </figure>
+        <figure class="half">
+          <div class="shot">
+            <figcaption>Studio · Trending OI</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/trending-oi.webp" width="2880" height="1800" loading="lazy" alt="Trending OI table with PCR, OI change and an interpretation such as short covering or long unwinding for each interval."></button>
+          </div>
+        </figure>
+        <figure class="half">
+          <div class="shot">
+            <figcaption>Studio · Thesis library</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/thesis.webp" width="2880" height="1800" loading="lazy" alt="Thesis library with daily movement, weekly and expiry movement, and seasonal movement studies."></button>
+          </div>
+          <p class="cap"><strong>Thesis library.</strong> How far does the index usually move in a day, into expiry, or in a given month? Answered from history.</p>
+        </figure>
+        <figure class="half">
+          <div class="shot">
+            <figcaption>Trade · Charts</figcaption>
+            <button type="button" data-zoom><img src="assets/screens/charts.webp" width="2880" height="1800" loading="lazy" alt="Candlestick chart of NIFTY with a watchlist and drawing tools."></button>
+          </div>
+          <p class="cap"><strong>Charts.</strong> Price action with your watchlist alongside, and layouts saved for next time.</p>
+        </figure>
       </div>
+    </section>
 
-      <div class="col-lg-6 position-relative text-center order-1 order-lg-2 pb-4">
-        <div class="position-relative d-inline-block" style="padding-top: 50px; padding-bottom: 130px;">
-          <!-- Foreground -->
-          <img src="https://i.ibb.co/ZRpYQ6fB/Analysis.png"
-              alt="Broker Screenshot"
-              class="img-fluid rounded shadow-lg"
-              style="width: 80%; position: relative; z-index: 2; transform: rotate(-5deg);" />
-          <!-- Background - Rotated slightly -->
-          <img src="https://i.ibb.co/R1Xqh1b/Analysis1.png"
-              alt="Analytics Screenshot"
-              class="img-fluid rounded shadow position-absolute"
-              style="width: 80%; top: 180px; left: 60px; z-index: 1; opacity: 0.85; transform: rotate(5deg);" />
+    <div class="band" id="review">
+      <section class="wrap" aria-labelledby="review-title">
+        <div class="section-head">
+          <h2 id="review-title">Know what actually worked.</h2>
+          <p>Closed trades flow into your journal and P&amp;L automatically. Tag the setup, review the day, and see which ideas earn their keep.</p>
         </div>
-      </div>
+        <div class="review">
+          <div class="col">
+            <figure>
+              <div class="shot">
+                <figcaption>Account · P&amp;L heatmap</figcaption>
+                <button type="button" data-zoom><img src="assets/screens/pnl-heatmap.webp" width="2880" height="1800" loading="lazy" alt="P&L heatmap calendar for July to September 2026 with green and red days, YTD P&L, best and worst day, and a 65% daily win rate."></button>
+              </div>
+              <p class="cap"><strong>P&amp;L heatmap.</strong> Every trading day coloured by result. Click a day to see the trades behind it.</p>
+            </figure>
+          </div>
+          <div class="col">
+            <figure>
+              <div class="shot">
+                <figcaption>Trade · Journal</figcaption>
+                <button type="button" data-zoom><img src="assets/screens/journal.webp" width="2880" height="1800" loading="lazy" alt="Trading journal dashboard with net P&L, P&L by setup and recent entries."></button>
+              </div>
+              <p class="cap"><strong>Journal.</strong> P&amp;L by setup, so you know whether breakouts or reversals pay you.</p>
+            </figure>
+            <figure>
+              <div class="shot">
+                <figcaption>Account · P&amp;L statement</figcaption>
+                <button type="button" data-zoom><img src="assets/screens/pnl-statement.webp" width="2880" height="1800" loading="lazy" alt="P&L statement listing closed trades with quantity, buy and sell averages and realised P&L."></button>
+              </div>
+              <p class="cap"><strong>Statement.</strong> A clean ledger of closed trades, ready to export as CSV.</p>
+            </figure>
+          </div>
+        </div>
+      </section>
     </div>
-  </div>
-</section>
 
-  <section id="videos" class="video-section">
-    <div class="container text-center">
-      <h2 class="section-title">Featured Videos: Explore DheQuest</h2>
-      <p class="mb-4">See DheQuest in action and learn about our platform features, analysis tools, and broker integrations.</p>
-      <div class="row justify-content-center">
-        <div class="col-lg-8 mb-4">
-          <div class="embed-responsive embed-responsive-16by9 featured-video mb-3">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rh3491k725k" allowfullscreen></iframe>
-          </div>
-          <span class="badge badge-primary mb-3">Featured</span>
-        </div>
+    <section class="wrap" aria-labelledby="platform-title">
+      <div class="section-head">
+        <h2 id="platform-title">Built for how Indian traders work.</h2>
       </div>
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Ae4kEvll6m4" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/sG32ndis9Ic" allowfullscreen></iframe>
-          </div>
-        </div>
-        <div class="col-md-4 mb-4">
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/m9LTi52sn6o" allowfullscreen></iframe>
-          </div>
-        </div>
+      <div class="platform">
+        <div><h3>Eight brokers, one screen</h3><p>Connect Zerodha, Upstox, Angel One, Fyers, Groww, Dhan, Kotak Neo or Axis Direct, and see every account together.</p></div>
+        <div><h3>Teams and organisations</h3><p>Place orders for team members, and review group positions, orders and baskets in one place.</p></div>
+        <div><h3>Paper or real</h3><p>Practise with paper trades and keep their results apart from real ones until you're ready.</p></div>
+        <div><h3>Alerts where you are</h3><p>Strategy actions can notify you on Telegram or by email as they happen.</p></div>
+        <div><h3>Signals and strategies marketplace</h3><p>Follow published calls with their tracked outcomes, or list your own strategies for others.</p></div>
+        <div><h3>NSE options first</h3><p>NIFTY, BANKNIFTY and stock options, with weekly and monthly expiries handled for you.</p></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-md-3 mb-4 mb-md-0">
-          <span class="footer-brand">DheQuest</span>
-          <div class="footer-desc">
-            Revolutionizing trading with intelligent automation and data-driven insights that empower traders.
-          </div>
-          <div class="footer-social mb-2">
-            <a href="https://www.facebook.com/dhequest" target="_blank"><i class="fab fa-facebook-f"></i></a>
-            <a href="https://x.com/Dhequest" target="_blank"><i class="fab fa-x"></i></a>
-            <a href="https://www.instagram.com/dhequest" target="_blank"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/showcase/dhequest" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-            <a href="https://www.youtube.com/@dhequest" target="_blank"><i class="fab fa-youtube"></i></a>
-          </div>
-        </div>
-        <div class="col-12 col-md-3 mb-4 mb-md-0 footer-links">
-          <div class="fw-bold mb-2">Quick Links</div>
-          <a href="#hero">Home</a>
-          <a href="#features">Features</a>
-          <a href="#videos">Videos</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms of Service</a>
-        </div>
-        <div class="col-12 col-md-3 mb-4 mb-md-0 footer-contact">
-          <div class="fw-bold mb-2">Contact Info</div>
-          <div><i class="fa-solid fa-envelope"></i> contact@sspart-enterprise.com</div>
-          <div><i class="fa-solid fa-phone"></i> +91 95150-93965</div>
+    <section id="videos" class="wrap" aria-labelledby="videos-title">
+      <div class="section-head">
+        <h2 id="videos-title">See it in action.</h2>
+        <p>Short walkthroughs of the platform, the analysis tools and broker setup.</p>
+      </div>
+      <div class="videos">
+        <div class="video"><button type="button" data-yt="rh3491k725k" aria-label="Play featured DheQuest video"></button></div>
+        <div class="list">
+          <div class="video"><button type="button" data-yt="Ae4kEvll6m4" aria-label="Play DheQuest video 2"></button></div>
+          <div class="video"><button type="button" data-yt="sG32ndis9Ic" aria-label="Play DheQuest video 3"></button></div>
+          <div class="video"><button type="button" data-yt="m9LTi52sn6o" aria-label="Play DheQuest video 4"></button></div>
         </div>
       </div>
-      <div class="footer-bottom mt-4">
-        <div>&copy; 2025 SSPART Enterprise Private Limited. All rights reserved.</div>
+    </section>
+
+    <div class="cta">
+      <div class="wrap">
+        <h2>See DheQuest on your own strategy.</h2>
         <div>
-          <a href="privacy.html">Privacy</a>
-          <a href="terms.html">Terms</a>
-          <a href="cookies.html">Cookies</a>
+          <p>Tell us how you trade today. We'll walk you through building, testing and running it in DheQuest.</p>
+          <a class="btn btn-solid" href="mailto:contact@sspart-enterprise.com?subject=DheQuest%20walkthrough">Book a walkthrough</a>
         </div>
       </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div class="about">
+          <img src="assets/logo.png" alt="DheQuest" width="128" height="30" style="height:30px;width:auto">
+          <p>Build, backtest and trade options strategies, with the market data and records to back every decision.</p>
+          <div class="social">
+            <a href="https://www.youtube.com/@dhequest" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
+            <a href="https://x.com/Dhequest" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24"><path d="M18.9 1.2h3.7l-8 9.2 9.4 12.4h-7.4l-5.8-7.6-6.6 7.6H.5L9 13 0 1.2h7.6l5.2 6.9 6.1-6.9zm-1.3 19.5h2L6.5 3.2H4.3l13.3 17.5z"/></svg></a>
+            <a href="https://www.linkedin.com/showcase/dhequest" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.3V9h3.4v1.6h.1a3.8 3.8 0 0 1 3.4-1.9c3.6 0 4.3 2.4 4.3 5.5v6.3zM5.3 7.4a2.1 2.1 0 1 1 0-4.2 2.1 2.1 0 0 1 0 4.2zM7.1 20.5H3.6V9h3.5v11.5zM22.2 0H1.8C.8 0 0 .8 0 1.7v20.6c0 .9.8 1.7 1.8 1.7h20.4c1 0 1.8-.8 1.8-1.7V1.7C24 .8 23.2 0 22.2 0z"/></svg></a>
+            <a href="https://www.instagram.com/dhequest" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3c1.2-.1 1.6-.1 4.8-.1zM12 0C8.7 0 8.3 0 7.1.1 2.7.3.3 2.7.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.2 4.4 2.6 6.8 7 7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c4.4-.2 6.8-2.6 7-7 .1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.2-4.4-2.6-6.8-7-7C15.7 0 15.3 0 12 0zm0 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.8a1.4 1.4 0 1 0 0 2.9 1.4 1.4 0 0 0 0-2.9z"/></svg></a>
+            <a href="https://www.facebook.com/dhequest" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4h-3V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <a href="#workflow">How it works</a>
+          <a href="#markets">Market data</a>
+          <a href="#review">Journal &amp; P&amp;L</a>
+          <a href="#videos">Videos</a>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <a href="mailto:contact@sspart-enterprise.com">contact@sspart-enterprise.com</a>
+          <a href="tel:+919515093965">+91 95150-93965</a>
+        </div>
+      </div>
+      <div class="legal">
+        <span>&copy; <span id="year">2026</span> SSPART Enterprise Private Limited</span>
+        <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="cookies.html">Cookies</a></nav>
+      </div>
+      <p class="disclaimer">Screens show sample data for illustration. Trading in derivatives involves substantial risk; past and simulated performance does not guarantee future results.</p>
     </div>
   </footer>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <dialog class="lightbox" id="lightbox" aria-label="Screenshot preview">
+    <form method="dialog"><button aria-label="Close">&times;</button></form>
+    <img alt="">
+  </dialog>
+
   <script>
-    // Smooth scroll to videos section
-    document.querySelectorAll('a[href="#videos"]').forEach(function(link) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('videos').scrollIntoView({ behavior: 'smooth' });
+    const nav = document.getElementById('nav');
+    const toggle = nav.querySelector('.nav-toggle');
+    toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', nav.classList.toggle('open')));
+    nav.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); toggle.setAttribute('aria-expanded', false); }));
+    addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 8), { passive: true });
+
+    const box = document.getElementById('lightbox'), boxImg = box.querySelector('img');
+    document.querySelectorAll('[data-zoom]').forEach(b => b.addEventListener('click', () => {
+      const img = b.querySelector('img'); boxImg.src = img.src; boxImg.alt = img.alt; box.showModal();
+    }));
+    box.addEventListener('click', e => { if (e.target === box) box.close(); });
+
+    // Load YouTube only when asked: thumbnail first, iframe on click
+    document.querySelectorAll('[data-yt]').forEach(b => {
+      b.style.backgroundImage = `url(https://i.ytimg.com/vi/${b.dataset.yt}/hqdefault.jpg)`;
+      b.addEventListener('click', () => {
+        const f = document.createElement('iframe');
+        f.src = `https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1`;
+        f.title = b.getAttribute('aria-label').replace('Play ', '');
+        f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen = true;
+        b.replaceWith(f);
       });
     });
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
