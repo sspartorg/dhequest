@@ -5,7 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>DheQuest | Build, backtest and trade options strategies</title>
   <meta name="description" content="DheQuest lets you draw an options strategy as a flow, replay it against past sessions, and trade it through your broker, with option chain, OI analytics, a journal and P&L heatmaps in one place.">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://dhequest.com/">
+  <meta property="og:title" content="DheQuest | Build, backtest and trade options strategies">
+  <meta property="og:description" content="Draw an options strategy as a flow, replay it against past sessions, and trade it through your broker.">
+  <meta property="og:image" content="https://dhequest.com/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="DheQuest: Your options desk, from idea to order.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Dhequest">
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@700;800&display=swap" rel="stylesheet">
@@ -56,7 +69,9 @@
     .nav.solid { background: rgba(243, 246, 245, .92); backdrop-filter: blur(12px); color: var(--text); box-shadow: 0 1px 0 var(--line); }
     .nav .wrap { display: flex; align-items: center; gap: 36px; height: 72px; }
     .nav-logo { display: flex; align-items: center; }
-    .nav-logo img { height: 30px; width: auto; }
+    .nav-logo img { height: 33px; width: auto; }
+    .nav .logo-on-light, .nav.solid .logo-on-dark, .nav.open .logo-on-dark { display: none; }
+    .nav.solid .logo-on-light, .nav.open .logo-on-light { display: block; }
     .nav-links { display: flex; gap: 32px; margin-left: auto; }
     .nav-links a { text-decoration: none; font-weight: 500; font-size: .96rem; opacity: .85; }
     .nav-links a:hover { opacity: 1; }
@@ -302,7 +317,7 @@
 <body>
   <header class="nav" id="nav">
     <div class="wrap">
-      <a class="nav-logo" href="#top" aria-label="DheQuest home"><img src="assets/logo.png" alt="DheQuest" width="128" height="30"></a>
+      <a class="nav-logo" href="#top" aria-label="DheQuest home"><img class="logo-on-dark" src="assets/logo-on-dark.svg" alt="DheQuest" width="122" height="33"><img class="logo-on-light" src="assets/logo.svg" alt="DheQuest" width="122" height="33"></a>
       <button class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
         <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
@@ -565,7 +580,7 @@
     <div class="wrap">
       <div class="foot">
         <div class="about">
-          <img src="assets/logo.png" alt="DheQuest" width="128" height="30" style="height:30px;width:auto">
+          <img src="assets/logo-on-dark.svg" alt="DheQuest" width="122" height="33" style="height:33px;width:auto">
           <p>Build, backtest and trade options strategies, with the market data and records to back every decision.</p>
           <div class="social">
             <a href="https://www.youtube.com/@dhequest" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg></a>
