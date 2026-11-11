@@ -27,7 +27,7 @@ a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
 /* Nav */
 .nav { position: sticky; top: 0; z-index: 10; background: rgba(243, 246, 245, .96); box-shadow: 0 1px 0 var(--line); }
 .nav .wrap { display: flex; align-items: center; gap: 36px; height: 72px; }
-.nav-logo img { height: 30px; width: auto; }
+.nav-logo img { height: 33px; width: auto; }
 .nav-links { display: flex; gap: 32px; margin-left: auto; }
 .nav-links a { text-decoration: none; font-weight: 500; font-size: .96rem; opacity: .85; }
 .nav-links a:hover { opacity: 1; }
